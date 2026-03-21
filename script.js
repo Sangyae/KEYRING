@@ -8,12 +8,13 @@ if(localStorage.getItem('kcVersion') !== APP_VERSION) {
 }
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB5ed0emBRCXIBGgx5itUvpt6CsqpGD9P8",
-    authDomain: "keyring-crafters.firebaseapp.com",
-    projectId: "keyring-crafters",
-    storageBucket: "keyring-crafters.firebasestorage.app",
-    messagingSenderId: "61300048310",
-    appId: "1:61300048310:web:4bf05490b37a781ee2c117"
+  apiKey: "AIzaSyB9UUGburEXWnRXXIozEM4et1J8rMzMW-s",
+  authDomain: "tiny-crafts-b37e6.firebaseapp.com",
+  projectId: "tiny-crafts-b37e6",
+  storageBucket: "tiny-crafts-b37e6.firebasestorage.app",
+  messagingSenderId: "358810305252",
+  appId: "1:358810305252:web:b8007382e50af6acc0a2f1",
+  measurementId: "G-25N130SF5M"
 };
 
 let auth, db;

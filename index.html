@@ -187,6 +187,12 @@
 </div>
 
 <div id="login-view" class="hidden">
+    <div class="login-header" style="background: var(--primary-color); padding: 1.5rem 5%; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(242, 106, 68, 0.2);">
+        <a href="#" onclick="showView('landing')" class="login-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-size: 1.5rem; font-weight: 800; font-family: 'Poppins', sans-serif;">
+            <i class="fas fa-paw" style="background: white; color: var(--primary-color); padding: 8px 10px; border-radius: 12px; font-size: 1.2rem;"></i>
+            Tiny Crafts
+        </a>
+    </div>
     <div class="auth-container" id="auth-container">
         
         <div class="form-container sign-up-container">
@@ -202,7 +208,7 @@
 
                 <input type="email" id="reg-email" placeholder="Email Address" required />
                 <input type="password" id="reg-pass" placeholder="Password (Min 6 chars)" required />
-                <button type="submit" class="landing-btn-primary" style="margin-top: 15px; width: 100%;">Sign Up</button>
+                <button type="submit" style="background: var(--primary-color); color: white; border: none; padding: 14px 40px; border-radius: 50px; width: 100%; margin-top: 15px; font-weight: 700; font-size: 1rem; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(242, 106, 68, 0.3);" onmouseover="this.style.background='var(--primary-hover)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(242, 106, 68, 0.4)'" onmouseout="this.style.background='var(--primary-color)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(242, 106, 68, 0.3)'">Sign Up</button>
                 <p class="mobile-toggle">Already have an account? <a href="#" onclick="toggleMobileAuth(event, false)">Sign In</a></p>
             </form>
         </div>
@@ -221,7 +227,7 @@
                 <span style="color: var(--text-gray); margin-bottom: 10px; font-size: 0.85rem;">Hint: Admin users login with <b>admin@keyringcrafters.com</b></span>
                 <input type="email" id="login-user" placeholder="Email Address" required />
                 <input type="password" id="login-pass" placeholder="Password" required />
-                <button type="submit" class="landing-btn-primary" style="margin-top: 15px; width: 100%;">Sign In</button>
+                <button type="submit" style="background: var(--primary-color); color: white; border: none; padding: 14px 40px; border-radius: 50px; width: 100%; margin-top: 15px; font-weight: 700; font-size: 1rem; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(242, 106, 68, 0.3);" onmouseover="this.style.background='var(--primary-hover)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(242, 106, 68, 0.4)'" onmouseout="this.style.background='var(--primary-color)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(242, 106, 68, 0.3)'">Sign In</button>
                 <p class="mobile-toggle">Don't have an account? <a href="#" onclick="toggleMobileAuth(event, true)">Sign Up</a></p>
             </form>
         </div>
@@ -230,11 +236,11 @@
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1 class="landing-font">Welcome Back!</h1><p>Login to find the perfect adorable addition to your keys.</p>
-                    <button style="background: transparent; border: 2px solid #FFF; color: #FFF; border-radius: 50px; padding: 12px 45px; cursor: pointer; margin-top: 15px; font-weight:bold;" id="signInBtn" type="button">Sign In</button>
+                    <button style="background: white; color: var(--primary-color); border: none; border-radius: 50px; padding: 14px 50px; cursor: pointer; margin-top: 15px; font-weight:bold; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.2);" id="signInBtn" type="button" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1 class="landing-font">Hello, Friend!</h1><p>Join us to discover cute, handmade felt keyrings.</p>
-                    <button style="background: transparent; border: 2px solid #FFF; color: #FFF; border-radius: 50px; padding: 12px 45px; cursor: pointer; margin-top: 15px; font-weight:bold;" id="signUpBtn" type="button">Sign Up</button>
+                    <button style="background: white; color: var(--primary-color); border: none; border-radius: 50px; padding: 14px 50px; cursor: pointer; margin-top: 15px; font-weight:bold; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.2);" id="signUpBtn" type="button" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.2)'">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -492,8 +498,8 @@
         <div class="footer-col">
             <h4 style="color: var(--yellow); margin-bottom: 15px;">Follow Us</h4>
             <div class="footer-socials" style="display: flex; gap: 15px;">
-                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
-                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.facebook.com/Sangyaegaming" target="_blank" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/Sangyaegaming" target="_blank" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-pinterest-p"></i></a>
             </div>
         </div>

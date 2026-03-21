@@ -201,8 +201,8 @@
                 
                 <div class="social-container">
                     <button type="button" class="google" onclick="signInWithGoogle()" aria-label="Sign in with Google"><i class="fab fa-google"></i></button>
-                    <button type="button" class="linkedin" onclick="mockSocialLogin('LinkedIn')" aria-label="Sign in with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
-                    <button type="button" class="instagram" onclick="mockSocialLogin('Instagram')" aria-label="Sign in with Instagram"><i class="fab fa-instagram"></i></button>
+                    <button type="button" class="facebook" onclick="signInWithFacebook()" aria-label="Sign in with Facebook"><i class="fab fa-facebook-f"></i></button>
+                    <button type="button" class="github" onclick="signInWithGitHub()" aria-label="Sign in with GitHub"><i class="fab fa-github"></i></button>
                 </div>
                 <div class="divider">OR USE EMAIL</div>
 
@@ -219,8 +219,8 @@
                 
                 <div class="social-container">
                     <button type="button" class="google" onclick="signInWithGoogle()" aria-label="Sign in with Google"><i class="fab fa-google"></i></button>
-                    <button type="button" class="linkedin" onclick="mockSocialLogin('LinkedIn')" aria-label="Sign in with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
-                    <button type="button" class="instagram" onclick="mockSocialLogin('Instagram')" aria-label="Sign in with Instagram"><i class="fab fa-instagram"></i></button>
+                    <button type="button" class="facebook" onclick="signInWithFacebook()" aria-label="Sign in with Facebook"><i class="fab fa-facebook-f"></i></button>
+                    <button type="button" class="github" onclick="signInWithGitHub()" aria-label="Sign in with GitHub"><i class="fab fa-github"></i></button>
                 </div>
                 <div class="divider">OR USE EMAIL</div>
 
@@ -415,7 +415,15 @@
                 </select>
                 <input type="number" id="add-stock" placeholder="Stock">
             </div>
-            <input type="text" id="add-img" placeholder="Image Name (e.g. baby.jpg)">
+            <div style="margin-top: 10px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark);">Upload Product Image:</label>
+                <input type="file" id="add-img-file" accept="image/*" onchange="previewImageFile()" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; width: 100%; margin-bottom: 10px;">
+                <div id="img-preview" style="display: none; text-align: center; margin-bottom: 10px;">
+                    <img id="preview-img" src="" style="max-width: 150px; max-height: 150px; border-radius: 8px; object-fit: cover;">
+                    <p id="img-filename" style="margin-top: 8px; color: var(--text-gray); font-size: 0.9rem;"></p>
+                </div>
+                <input type="hidden" id="add-img">
+            </div>
             <input type="text" id="add-desc" placeholder="Description">
             <button class="btn-primary" style="margin-top: 10px;" onclick="adminAddProduct()">Save Product</button>
         </div>

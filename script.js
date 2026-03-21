@@ -180,6 +180,28 @@ function signInWithGoogle() {
     });
 }
 
+function signInWithFacebook() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    auth.signInWithPopup(provider)
+    .then((result) => {
+        showToast(`Welcome via Facebook, ${result.user.displayName}!`, "success");
+        showView('shop');
+    }).catch((error) => {
+        showToast("Facebook login: Make sure it's enabled in Firebase Console. " + error.message, "error");
+    });
+}
+
+function signInWithGitHub() {
+    const provider = new firebase.auth.GithubAuthProvider();
+    auth.signInWithPopup(provider)
+    .then((result) => {
+        showToast(`Welcome via GitHub, ${result.user.displayName}!`, "success");
+        showView('shop');
+    }).catch((error) => {
+        showToast("GitHub login: Make sure it's enabled in Firebase Console. " + error.message, "error");
+    });
+}
+
 function mockSocialLogin(platform) {
     currentUser = platform.toLowerCase() + "_user@tinycrafts.com";
     document.getElementById('profile-name-nav').innerText = platform + " User";
@@ -749,12 +771,42 @@ function adminDelete(id) {
     renderAdmin(); showToast("Product deleted. (Locally)", "success");
 }
 
+// =========================================================
+// 10. ADMIN - IMAGE FILE PREVIEW
+// =========================================================
+function previewImageFile() {
+    const fileInput = document.getElementById('add-img-file');
+    const previewDiv = document.getElementById('img-preview');
+    const previewImg = document.getElementById('preview-img');
+    const filenameText = document.getElementById('img-filename');
+    const hiddenInput = document.getElementById('add-img');
+    
+    if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const filename = file.name;
+        
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewDiv.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+        
+        // Set filename in hidden input
+        filenameText.textContent = 'File: ' + filename;
+        hiddenInput.value = 'images/' + filename; // Store with images/ prefix
+        
+        showToast('Image selected! After saving, add the file to the images/ folder', 'info');
+    }
+}
+
 function adminAddProduct() {
     const name = document.getElementById('add-name').value;
     const cat = document.getElementById('add-cat').value;
     const price = document.getElementById('add-price').value;
     const stock = document.getElementById('add-stock').value || 10;
-    const img = document.getElementById('add-img').value || 'baby.jpg';
+    const img = document.getElementById('add-img').value || 'images/baby.jpg';
     const desc = document.getElementById('add-desc').value || "A new cute craft addition.";
     
     if(!name || !price) return showToast("Name and Price are required", "error");
@@ -764,6 +816,8 @@ function adminAddProduct() {
     localStorage.setItem('kcProducts', JSON.stringify(products));
     
     ['name','cat','price','stock','img','desc'].forEach(id => { const el = document.getElementById('add-'+id); if(el) el.value = ''; });
+    document.getElementById('add-img-file').value = '';
+    document.getElementById('img-preview').style.display = 'none';
     renderAdmin(); 
     showToast("Product added! (Locally)", "success");
 }

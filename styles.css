@@ -154,8 +154,8 @@ input:focus, select:focus { border-color: var(--primary-color); background: var(
 .social-container { margin: 15px 0; display: flex; gap: 15px; justify-content: center; }
 .social-container button { border: 2px solid var(--border-color); border-radius: 50%; height: 45px; width: 45px; background: transparent; cursor: pointer; color: var(--text-dark); transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 .social-container button.google:hover { background: #db4437; border-color: #db4437; color: white;}
-.social-container button.linkedin:hover { background: #007bb5; border-color: #007bb5; color: white;}
-.social-container button.instagram:hover { background: #e1306c; border-color: #e1306c; color: white;}
+.social-container button.facebook:hover { background: #1877f2; border-color: #1877f2; color: white;}
+.social-container button.github:hover { background: #333333; border-color: #333333; color: white;}
 .divider { display: flex; align-items: center; text-align: center; color: var(--text-gray); width: 100%; margin: 10px 0; font-size: 0.8rem;}
 .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border-color); margin: 0 10px; }
 

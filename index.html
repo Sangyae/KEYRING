@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Crafts | Handmade Felt Keyrings</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header id="main-header" class="hidden">
+    <a href="#" class="logo" onclick="showView('landing')"><i class="fas fa-paw"></i> Tiny Crafts</a>
+    <nav>
+        <button id="admin-nav-btn" class="hidden" onclick="showView('admin')"><i class="fas fa-crown"></i> Admin</button>
+        <button onclick="showView('shop')"><i class="fas fa-store"></i> Shop</button>
+        <button onclick="showView('wishlist')"><i class="fas fa-heart"></i> Wishlist (<span id="wish-count">0</span>)</button>
+        <button onclick="showView('cart')"><i class="fas fa-shopping-cart" id="cart-icon"></i> Cart (£<span id="cart-total-nav">0.00</span>)</button>
+        <button onclick="showView('profile')"><i class="fas fa-user"></i> <span id="profile-name-nav">Profile</span></button>
+        <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        <button onclick="toggleTheme()" id="theme-btn"><i class="fas fa-moon"></i></button>
+    </nav>
+</header>
+
+<div id="toast-container"></div>
+
+<div id="landing-view">
+    <div class="landing-wrapper">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+        
+        <header class="landing-header">
+            <a href="#" class="landing-logo">
+                <i class="fas fa-paw"></i> Tiny Crafts
+            </a>
+            <nav class="landing-nav">
+                <a href="#" onclick="showView('landing')" style="color: white;">Home</a>
+                <a href="#" onclick="showView('shop')">Shop All</a>
+                <a href="#" onclick="showView('about')">Our Story</a>
+            </nav>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button class="landing-btn-secondary" onclick="showView('login')">Sign In</button>
+            </div>
+        </header>
+
+        <main class="fsg-hero">
+            <div class="hero-content" style="z-index: 2;">
+                <span class="fsg-subtitle"><i class="fas fa-leaf" style="margin-right: 5px;"></i> Ethical & Sustainable</span>
+                <h1 class="fsg-title">Handmade <br><span>Felt Magic.</span></h1>
+                <p class="fsg-text">Bring a pop of joy to your day! Discover our colorful collection of adorable needle-felted characters, beautifully handcrafted with 100% sustainable wool.</p>
+                <button class="fsg-btn-primary" onclick="showView('shop')">Shop The Collection <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <div class="fsg-visual">
+                <img src="banner4.jpg" alt="Collection of cute felt keyrings" onerror="this.src='https://images.unsplash.com/photo-1596489397682-3d719ceea1eb?auto=format&fit=crop&w=1000&q=80'">
+                <div class="floating-badge" style="bottom: 15px; left: 15px; z-index: 3;">
+                    <div class="badge-icon" style="background: #F9D531; color: #2b2d42;"><i class="fas fa-smile"></i></div>
+                    <div class="badge-text" style="text-align: left;">
+                        <h4 class="landing-font">Fairtrade</h4>
+                        <p class="landing-font">Guaranteed</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="fsg-features">
+        <div class="fsg-feature-item">
+            <div class="fsg-feature-icon" style="color: #4ECDC4; background: #E0F5F6;"><i class="fas fa-leaf"></i></div>
+            100% Sustainable Wool
+        </div>
+        <div class="fsg-feature-item">
+            <div class="fsg-feature-icon" style="color: var(--primary-color); background: #FFE6D9;"><i class="fas fa-globe-americas"></i></div>
+            Ethically Handmade
+        </div>
+        <div class="fsg-feature-item">
+            <div class="fsg-feature-icon" style="color: #e5b900; background: #FFF9DB;"><i class="fas fa-box-open"></i></div>
+            Plastic-Free Packaging
+        </div>
+    </div>
+
+    <section class="landing-section">
+        <svg class="bg-dots" width="100" height="200" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="15" cy="15" r="15" fill="#d9e0e3"/><circle cx="60" cy="50" r="15" fill="#d9e0e3"/><circle cx="25" cy="90" r="15" fill="#d9e0e3"/><circle cx="75" cy="140" r="15" fill="#d9e0e3"/><circle cx="35" cy="180" r="15" fill="#d9e0e3"/>
+        </svg>
+
+        <h2 class="section-title">Our Collections</h2>
+        <div class="collections-grid">
+            <div class="collection-card" onclick="showView('shop')">
+                <img src="panda.jpg" alt="Animals Collection" onerror="this.src='https://placehold.co/300'">
+                <h3>Animals & Wildlife</h3>
+                <p>15 items</p>
+            </div>
+            <div class="collection-card" onclick="showView('shop')">
+                <img src="keyring4.jpg" alt="Food Collection" onerror="this.src='https://placehold.co/300'">
+                <h3>Food & Plants</h3>
+                <p>8 items</p>
+            </div>
+            <div class="collection-card" onclick="showView('shop')">
+                <img src="keyring.jpg" alt="Symbols Collection" onerror="this.src='https://placehold.co/300'">
+                <h3>Symbols & Charms</h3>
+                <p>12 items</p>
+            </div>
+        </div>
+        <button class="btn-outline" onclick="showView('shop')">View All Collections</button>
+    </section>
+
+    <section class="landing-section" style="padding-top: 1rem; border-top: 1px solid var(--border-color); background: var(--white);">
+        <svg class="bg-waves" width="200" height="150" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 20 Q 50 50 100 20 T 200 20" stroke="#FFE6D9" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M0 60 Q 50 90 100 60 T 200 60" stroke="#FFE6D9" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M0 100 Q 50 130 100 100 T 200 100" stroke="#FFE6D9" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </svg>
+
+        <h2 class="section-title">Best Sellers</h2>
+        <div class="bestsellers-grid">
+            <div class="bestseller-card" onclick="showView('shop')">
+                <img src="sloth.jpg" alt="Handmade Felt Sleepy Sloth" onerror="this.src='https://placehold.co/200'">
+                <p class="bestseller-title">Handmade Felt Sleepy Sloth</p>
+                <p class="bestseller-price">£14.50</p>
+                <p class="bestseller-code">CODE: FBSLOTH</p>
+            </div>
+            <div class="bestseller-card" onclick="showView('shop')">
+                <img src="panda.jpg" alt="Handmade Felt Bamboo Panda" onerror="this.src='https://placehold.co/200'">
+                <p class="bestseller-title">Handmade Felt Bamboo Panda</p>
+                <p class="bestseller-price">£15.00</p>
+                <p class="bestseller-code">CODE: FBPANDA</p>
+            </div>
+            <div class="bestseller-card" onclick="showView('shop')">
+                <img src="hedgehog.jpg" alt="Handmade Felt Happy Hedgehog" onerror="this.src='https://placehold.co/200'">
+                <p class="bestseller-title">Handmade Felt Happy Hedgehog</p>
+                <p class="bestseller-price">£14.00</p>
+                <p class="bestseller-code">CODE: FBHEDGE</p>
+            </div>
+            <div class="bestseller-card" onclick="showView('shop')">
+                <img src="baby.jpg" alt="Handmade Felt Baby Penguin" onerror="this.src='https://placehold.co/200'">
+                <p class="bestseller-title">Handmade Felt Baby Penguin</p>
+                <p class="bestseller-price">£12.00</p>
+                <p class="bestseller-code">CODE: FBPENG</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-wrapper">
+        <div class="newsletter-box">
+            <div class="newsletter-text">
+                <h2>Join the Tiny Crafts Club!</h2>
+                <p>Subscribe for 10% off your first order, plus updates on new fluffy friends.</p>
+            </div>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Thanks for subscribing!', 'success'); this.reset();">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="social-section">
+        <h2 class="section-title" style="font-size: 1.8rem; margin-bottom: 0;">Follow our craft journey @TinyCrafts</h2>
+        <div class="social-grid">
+            <img src="baby.jpg" alt="Instagram 1" onerror="this.src='https://placehold.co/300'">
+            <img src="panda.jpg" alt="Instagram 2" onerror="this.src='https://placehold.co/300'">
+            <img src="sloth.jpg" alt="Instagram 3" onerror="this.src='https://placehold.co/300'">
+            <img src="keyring4.jpg" alt="Instagram 4" onerror="this.src='https://placehold.co/300'">
+            <img src="hedgehog.jpg" alt="Instagram 5" onerror="this.src='https://placehold.co/300'">
+        </div>
+    </section>
+</div>
+
+<div id="about-view" class="hidden container">
+    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">About Tiny Crafts 🧶</h2>
+    <div class="checkout-card" style="line-height: 1.8;">
+        <h3 style="color: var(--primary-color); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Our Passion</h3>
+        <p style="color: var(--text-gray); margin-bottom: 20px;">
+            Welcome to Tiny Crafts! We specialize in creating the cutest, highest-quality needle-felted keyrings. Whether you love woodland animals, pop-culture icons, or sweet treats, we have a tiny companion for your keys or backpack.
+        </p>
+        <h3 style="color: var(--primary-color); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Why Choose Us?</h3>
+        <ul style="color: var(--text-gray); margin-left: 20px; margin-bottom: 20px;">
+            <li style="margin-bottom: 10px;"><strong>Handmade Charm:</strong> Every single item is uniquely crafted, meaning no two pandas or sloths are exactly alike!</li>
+            <li style="margin-bottom: 10px;"><strong>Soft & Durable:</strong> Our felted wool is tightly packed to endure the daily bumping of keys and bags.</li>
+            <li style="margin-bottom: 10px;"><strong>Independent Makers:</strong> By shopping with us, you are supporting independent artists.</li>
+        </ul>
+        <button class="btn-primary" style="width: auto; padding: 10px 25px;" onclick="showView('login')">Sign In to Start Shopping</button>
+    </div>
+</div>
+
+<div id="login-view" class="hidden">
+    <div class="auth-container" id="auth-container">
+        
+        <div class="form-container sign-up-container">
+            <form onsubmit="registerUser(event)">
+                <h1 class="landing-font" style="margin-bottom: 10px;">Create Account</h1>
+                
+                <div class="social-container">
+                    <button type="button" class="google" onclick="signInWithGoogle()" aria-label="Sign in with Google"><i class="fab fa-google"></i></button>
+                    <button type="button" class="linkedin" onclick="mockSocialLogin('LinkedIn')" aria-label="Sign in with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
+                    <button type="button" class="instagram" onclick="mockSocialLogin('Instagram')" aria-label="Sign in with Instagram"><i class="fab fa-instagram"></i></button>
+                </div>
+                <div class="divider">OR USE EMAIL</div>
+
+                <input type="email" id="reg-email" placeholder="Email Address" required />
+                <input type="password" id="reg-pass" placeholder="Password (Min 6 chars)" required />
+                <button type="submit" class="landing-btn-primary" style="margin-top: 15px; width: 100%;">Sign Up</button>
+                <p class="mobile-toggle">Already have an account? <a href="#" onclick="toggleMobileAuth(event, false)">Sign In</a></p>
+            </form>
+        </div>
+        
+        <div class="form-container sign-in-container">
+            <form onsubmit="loginUser(event)">
+                <h1 class="landing-font" style="margin-bottom: 10px;">Sign In</h1>
+                
+                <div class="social-container">
+                    <button type="button" class="google" onclick="signInWithGoogle()" aria-label="Sign in with Google"><i class="fab fa-google"></i></button>
+                    <button type="button" class="linkedin" onclick="mockSocialLogin('LinkedIn')" aria-label="Sign in with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
+                    <button type="button" class="instagram" onclick="mockSocialLogin('Instagram')" aria-label="Sign in with Instagram"><i class="fab fa-instagram"></i></button>
+                </div>
+                <div class="divider">OR USE EMAIL</div>
+
+                <span style="color: var(--text-gray); margin-bottom: 10px; font-size: 0.85rem;">Hint: Admin users login with <b>admin@keyringcrafters.com</b></span>
+                <input type="email" id="login-user" placeholder="Email Address" required />
+                <input type="password" id="login-pass" placeholder="Password" required />
+                <button type="submit" class="landing-btn-primary" style="margin-top: 15px; width: 100%;">Sign In</button>
+                <p class="mobile-toggle">Don't have an account? <a href="#" onclick="toggleMobileAuth(event, true)">Sign Up</a></p>
+            </form>
+        </div>
+
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1 class="landing-font">Welcome Back!</h1><p>Login to find the perfect adorable addition to your keys.</p>
+                    <button style="background: transparent; border: 2px solid #FFF; color: #FFF; border-radius: 50px; padding: 12px 45px; cursor: pointer; margin-top: 15px; font-weight:bold;" id="signInBtn" type="button">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1 class="landing-font">Hello, Friend!</h1><p>Join us to discover cute, handmade felt keyrings.</p>
+                    <button style="background: transparent; border: 2px solid #FFF; color: #FFF; border-radius: 50px; padding: 12px 45px; cursor: pointer; margin-top: 15px; font-weight:bold;" id="signUpBtn" type="button">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="shop-view" class="hidden">
+    <div class="controls">
+        <select id="cat-filter" onchange="filterProducts()" aria-label="Filter by Category">
+            <option value="all">All Crafts</option>
+            <option value="Animals">Animals & Wildlife</option>
+            <option value="Food & Plants">Food & Plants</option>
+            <option value="Pop Culture & Fun">Pop Culture & Fun</option>
+            <option value="Symbols & Charms">Symbols & Charms</option>
+        </select>
+        
+        <div style="position: relative; width: 100%;">
+            <input type="text" id="search-input" placeholder="Search for tiny crafts..." onkeyup="handleLiveSearch(event)" aria-label="Search Products">
+            <div id="autocomplete-dropdown" class="autocomplete-results"></div>
+        </div>
+
+        <select id="sort-filter" onchange="filterProducts()" aria-label="Sort Products">
+            <option value="default">Sort by...</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+        </select>
+    </div>
+
+    <div class="price-slider-container">
+        <label style="min-width: 120px;">Max Price: £<span id="price-slider-val">50</span></label>
+        <input type="range" id="price-slider" min="0" max="50" value="50" oninput="document.getElementById('price-slider-val').innerText=this.value; filterProducts()" style="flex: 1;" aria-label="Price Slider">
+    </div>
+
+    <div id="product-list" class="product-grid" role="list"></div>
+</div>
+
+<div id="cart-view" class="hidden container">
+    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Your Basket 🧺</h2>
+    <div style="overflow-x: auto;">
+        <table id="cart-table">
+            <thead><tr><th>Craft</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th></tr></thead>
+            <tbody id="cart-items"></tbody>
+        </table>
+    </div>
+    <div style="text-align: right; padding: 30px; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color); color: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.03);">
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end;">
+            <input type="text" id="promo-input" placeholder="Promo code (Try CUTE20)" style="width: 250px; margin: 0;">
+            <button class="btn-primary" style="width: auto; padding: 10px 25px;" onclick="applyPromo()">Apply</button>
+        </div>
+        <p id="promo-msg" style="font-weight: bold; margin-bottom: 10px; font-size: 0.9rem;"></p>
+        <h3 style="color: var(--text-gray);">Subtotal: £<span id="cart-subtotal">0.00</span></h3>
+        <h2 style="color: var(--primary-color); margin: 15px 0; font-size: 2rem;">Grand Total: £<span id="cart-grand-total">0.00</span></h2>
+        <button class="btn-primary" style="width:auto; font-size: 1.1rem; padding: 15px 40px; border-radius: 50px;" onclick="goToCheckout()">Proceed to Checkout <i class="fas fa-arrow-right" style="margin-left: 5px;"></i></button>
+    </div>
+</div>
+
+<div id="checkout-view" class="hidden container">
+    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Secure Checkout 💳</h2>
+    <div class="checkout-steps">
+        <div class="step active" id="step-1-tab">1. Shipping</div>
+        <div class="step" id="step-2-tab">2. Payment</div>
+        <div class="step" id="step-3-tab">3. Review</div>
+    </div>
+    <div class="checkout-grid">
+        <div class="checkout-card" id="checkout-form-container">
+            <div id="checkout-step-1">
+                <h3 style="margin-bottom: 15px;">Delivery Details</h3>
+                <input type="text" id="checkout-name" placeholder="Full Name">
+                <input type="text" id="checkout-address" placeholder="Full Shipping Address">
+                <br><br>
+                <button class="btn-primary" onclick="nextCheckoutStep(2)">Proceed to Payment</button>
+            </div>
+            <div id="checkout-step-2" class="hidden">
+                <h3 style="margin-bottom: 15px;">Payment Details</h3>
+                <div class="credit-card-container">
+                    <div class="credit-card" id="interactive-card">
+                        <div class="card-inner" id="card-inner">
+                            <div class="card-front">
+                                <div style="font-size: 2rem; text-align: right;"><i class="fab fa-cc-visa"></i></div>
+                                <div style="font-size: 1.4rem; letter-spacing: 2px; margin: 20px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);" id="card-disp-num">#### #### #### ####</div>
+                                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; text-transform: uppercase;">
+                                    <div><small style="color: #FFD59E;">Cardholder</small><div id="card-disp-name">JOHN DOE</div></div>
+                                    <div><small style="color: #FFD59E;">Expires</small><div id="card-disp-exp">MM/YY</div></div>
+                                </div>
+                            </div>
+                            <div class="card-back">
+                                <div style="background: #111; height: 40px; margin-top: 25px; width: 100%;"></div>
+                                <div style="background: white; color: black; margin: 15px; padding: 10px; text-align: right; border-radius: 4px; font-weight: bold;">CVV: <span id="card-disp-cvv">###</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" id="card-num" placeholder="Card Number" maxlength="19" oninput="updateCardUI()">
+                <input type="text" id="card-name" placeholder="Name on Card" oninput="updateCardUI()">
+                <div style="display:flex; gap:10px;">
+                    <input type="text" id="card-exp" placeholder="MM/YY" maxlength="5" oninput="updateCardUI()">
+                    <input type="text" id="card-cvv" placeholder="CVV" maxlength="3" oninput="updateCardUI()" onfocus="flipCard(true)" onblur="flipCard(false)">
+                </div>
+                <div style="display:flex; gap:10px; margin-top: 20px;">
+                    <button class="btn-cancel" onclick="nextCheckoutStep(1)" style="width: 50%;">Back</button>
+                    <button class="btn-primary" onclick="nextCheckoutStep(3)" style="width: 50%;">Review Order</button>
+                </div>
+            </div>
+            <div id="checkout-step-3" class="hidden">
+                <h3 style="margin-bottom: 15px;">Final Review</h3>
+                <p style="color: var(--text-gray);">Please confirm your details below.</p>
+                <div style="background: var(--input-bg); padding: 15px; border-radius: 12px; margin: 15px 0;">
+                    <p><strong>Deliver To:</strong> <span id="review-addr-disp"></span></p>
+                    <p><strong>Billed To:</strong> Card ending in <span id="review-card-disp">####</span></p>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-cancel" onclick="nextCheckoutStep(2)" style="width: 50%;">Back</button>
+                    <button class="btn-primary" onclick="confirmOrder()" style="width: 50%;">Pay £<span id="checkout-total-btn">0.00</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="checkout-card" style="height: fit-content;">
+            <h3 style="margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Order Summary</h3>
+            <div id="order-summary-list" style="font-size: 0.95rem;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="profile-view" class="hidden container">
+    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">My Profile 📦</h2>
+    <div class="checkout-grid">
+        <div class="checkout-card" style="text-align: center; height: fit-content;">
+            <img src="https://ui-avatars.com/api/?name=Craft+Lover&background=F26A44&color=fff&size=100" style="border-radius: 50%; margin-bottom: 15px;" id="profile-avatar">
+            <h3 id="profile-name-display-card">Crafter User</h3>
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border-color);">
+            <p><strong>Total Spent:</strong> £<span id="profile-total-spent">0.00</span></p>
+            <p><strong>Total Orders:</strong> <span id="profile-order-count">0</span></p>
+        </div>
+        <div class="checkout-card">
+            <h3 style="margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Order History</h3>
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border-color);">
+            <div id="order-history-list">Loading...</div>
+        </div>
+    </div>
+</div>
+
+<div id="admin-view" class="hidden container">
+    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Admin Dashboard 👑</h2>
+    
+    <div class="checkout-card" style="margin-bottom: 20px; overflow-x: auto; border-top: 4px solid var(--primary-color);">
+        <h3 style="margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Agile Sprint & Critical Path Tracker 📊</h3>
+        <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Monitor the Work Breakdown Structure (WBS) and Critical Path (Zero Float) as requested in Week 5 Project Planning.</p>
+        <table style="width: 100%;">
+            <thead><tr><th>Task (WBS)</th><th>Sprint</th><th>Float (Slack)</th><th>Status</th><th>Critical Path?</th></tr></thead>
+            <tbody id="sprint-tracker-list"></tbody>
+        </table>
+    </div>
+
+    <div class="checkout-grid">
+        <div class="checkout-card">
+            <h3 style="margin-bottom: 15px;">Global Stats (Node.js Database)</h3>
+            <hr style="margin: 10px 0; border: 0; border-top: 1px solid var(--border-color);">
+            <p style="margin-top: 10px;">Total Revenue: <strong style="color: var(--primary-color); font-size: 1.5rem; display:block;" id="admin-revenue">£0.00</strong></p>
+            <p style="margin-top: 10px;">Total Orders: <strong id="admin-orders-count">0</strong></p>
+            <p style="margin-top: 10px;">Total Products: <strong id="admin-products-count">0</strong></p>
+        </div>
+        <div class="checkout-card">
+            <h3 style="margin-bottom: 15px;">Add New Craft</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" id="add-name" placeholder="Product Name">
+                <input type="number" id="add-price" placeholder="Price (£)">
+                <select id="add-cat">
+                    <option value="Animals">Animals & Wildlife</option>
+                    <option value="Food & Plants">Food & Plants</option>
+                    <option value="Pop Culture & Fun">Pop Culture & Fun</option>
+                    <option value="Symbols & Charms">Symbols & Charms</option>
+                </select>
+                <input type="number" id="add-stock" placeholder="Stock">
+            </div>
+            <input type="text" id="add-img" placeholder="Image Name (e.g. baby.jpg)">
+            <input type="text" id="add-desc" placeholder="Description">
+            <button class="btn-primary" style="margin-top: 10px;" onclick="adminAddProduct()">Save Product</button>
+        </div>
+    </div>
+    <div class="checkout-card" style="margin-top: 20px; overflow-x: auto;">
+        <h3 style="margin-bottom: 15px;">Manage Inventory</h3>
+        <table style="width: 100%;">
+            <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+            <tbody id="admin-inventory-list"></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="wishlist-view" class="hidden container">
+    <h2 style="color: var(--text-dark); margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Your Wishlist ❤️</h2>
+    <p style="color: var(--text-gray); margin-bottom: 20px;">Save your favorite cute crafts here for later.</p>
+    <div id="wishlist-list" class="product-grid" style="padding: 0; max-width: none;"></div>
+</div>
+
+<div id="product-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 800px; text-align: left;">
+        <span class="close-modal" onclick="closeModal('product-modal')">&times;</span>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <img id="modal-img" src="" style="width: 100%; max-width: 350px; border-radius: 15px; object-fit: cover;">
+            <div style="flex: 1; min-width: 250px;">
+                <p id="modal-cat" style="color: var(--text-gray); font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;"></p>
+                <h2 id="modal-title" style="color: var(--text-dark); margin: 10px 0; font-family: 'Poppins', sans-serif; font-size: 2rem;"></h2>
+                <h3 id="modal-price" style="color: var(--primary-color); margin-bottom: 15px; font-size: 1.8rem;"></h3>
+                <p id="modal-desc" style="color: var(--text-gray); margin-bottom: 25px; line-height: 1.6; font-size: 1.1rem;"></p>
+                <button id="modal-add-btn" class="btn-primary" style="padding: 15px; font-size: 1.1rem; border-radius: 50px;">Add to Basket <i class="fas fa-cart-plus" style="margin-left:5px;"></i></button>
+            </div>
+        </div>
+        
+        <hr style="margin: 30px 0 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+        <h3 style="color: var(--text-dark); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Customer Reviews ⭐</h3>
+        <div id="reviews-list" style="max-height: 150px; overflow-y: auto; margin-bottom: 15px;"></div>
+        <div style="display: flex; gap: 10px;">
+            <select id="review-rating" style="width: auto; margin: 0;">
+                <option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option><option value="3">⭐⭐⭐</option><option value="2">⭐⭐</option><option value="1">⭐</option>
+            </select>
+            <input type="text" id="review-text" placeholder="Write a sweet review..." style="flex: 1; margin: 0;">
+            <button class="btn-primary" style="width: auto; padding: 10px 25px;" onclick="submitReview()">Post</button>
+        </div>
+
+        <hr style="margin: 30px 0 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+        <h3 style="color: var(--text-dark); margin-bottom: 15px; font-size: 1.1rem; font-family: 'Poppins', sans-serif;">You might also love...</h3>
+        <div id="related-products" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px;"></div>
+    </div>
+</div>
+
+<div id="confirmation-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="text-align: center;">
+        <h3 style="color: var(--text-dark); font-family: 'Poppins', sans-serif; font-size: 1.8rem; margin-bottom: 10px;">Confirm Your Order</h3>
+        <p style="color: var(--text-gray);">Are you sure you are ready to adopt these cute crafts?</p>
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 25px;">
+            <button class="btn-cancel" onclick="closeModal('confirmation-modal')">Cancel</button>
+            <button class="btn-primary" style="width: auto; padding: 12px 30px; border-radius: 50px;" onclick="confirmOrder()">Yes, Place Order</button>
+        </div>
+    </div>
+</div>
+
+<footer class="fat-footer" style="background: #322554; color: white; padding: 4rem 5% 2rem; font-family: 'Montserrat', sans-serif;">
+    <div class="footer-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; max-width: 1200px; margin: 0 auto; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 3rem;">
+        <div class="footer-col">
+            <h3 class="landing-logo" style="color:var(--primary-color); font-weight:800; font-size:1.5rem; margin-bottom:15px; display:flex; align-items:center; gap:10px;"><i class="fas fa-paw" style="color:white; background:var(--primary-color); padding:5px 8px; border-radius:8px;"></i> Tiny Crafts</h3>
+            <p>Ethically handmade felt keyrings bringing joy to your everyday life. 100% sustainable wool.</p>
+        </div>
+        <div class="footer-col">
+            <h4 style="color: var(--yellow); margin-bottom: 15px;">Shop</h4>
+            <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 8px;" onclick="showView('shop')">Animals & Wildlife</a>
+            <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 8px;" onclick="showView('shop')">Food & Plants</a>
+            <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 8px;" onclick="showView('shop')">Symbols & Charms</a>
+        </div>
+        <div class="footer-col">
+            <h4 style="color: var(--yellow); margin-bottom: 15px;">Help & Info</h4>
+            <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 8px;">Delivery & Returns</a>
+            <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 8px;">Care Instructions</a>
+            <a href="#" style="color: rgba(255,255,255,0.7); text-decoration: none; display: block; margin-bottom: 8px;">Contact Us</a>
+        </div>
+        <div class="footer-col">
+            <h4 style="color: var(--yellow); margin-bottom: 15px;">Follow Us</h4>
+            <div class="footer-socials" style="display: flex; gap: 15px;">
+                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-pinterest-p"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom" style="text-align: center; padding-top: 2rem; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+        &copy; 2026 Tiny Crafts | Handmade Felt Keyrings. All rights reserved.
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -125,10 +125,9 @@ auth.onAuthStateChanged(user => {
             adminBtn.style.display = 'none';
         }
     } else {
-        if(!currentUser) {
-            document.getElementById('profile-name-nav').innerText = "Sign In";
-            document.getElementById('admin-nav-btn').classList.add('hidden');
-        }
+        currentUser = null;
+        document.getElementById('profile-name-nav').innerText = "Sign In";
+        document.getElementById('admin-nav-btn').classList.add('hidden');
     }
 });
 
@@ -173,6 +172,7 @@ function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
     .then((result) => {
+        currentUser = result.user.email;
         showToast(`Welcome via Google, ${result.user.displayName}!`, "success");
         showView('shop');
     }).catch((error) => {
@@ -184,6 +184,7 @@ function signInWithFacebook() {
     const provider = new firebase.auth.FacebookAuthProvider();
     auth.signInWithPopup(provider)
     .then((result) => {
+        currentUser = result.user.email;
         showToast(`Welcome via Facebook, ${result.user.displayName}!`, "success");
         showView('shop');
     }).catch((error) => {
@@ -195,6 +196,7 @@ function signInWithGitHub() {
     const provider = new firebase.auth.GithubAuthProvider();
     auth.signInWithPopup(provider)
     .then((result) => {
+        currentUser = result.user.email;
         showToast(`Welcome via GitHub, ${result.user.displayName}!`, "success");
         showView('shop');
     }).catch((error) => {

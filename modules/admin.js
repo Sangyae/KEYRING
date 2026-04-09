@@ -2,38 +2,6 @@
 // ADMIN MODULE
 // Admin dashboard, Sprint tracker, Inventory management
 // =========================================================
-
-const projectTasks = [
-    { id: 1, name: "1.1 UI/UX Design & Wireframing", sprint: "Sprint 1", float: 2, status: "Done" },
-    { id: 2, name: "1.2 HTML/CSS Frontend UI", sprint: "Sprint 1", float: 0, status: "Done" },
-    { id: 3, name: "2.1 Firebase Auth Integration", sprint: "Sprint 2", float: 0, status: "Done" },
-    { id: 4, name: "2.2 Node.js Backend Routing", sprint: "Sprint 2", float: 0, status: "In Progress" },
-    { id: 5, name: "3.1 Populate 20 Store Products", sprint: "Sprint 3", float: 5, status: "To Do" },
-    { id: 6, name: "3.2 Testing & Critical Path Review", sprint: "Sprint 3", float: 0, status: "To Do" },
-    { id: 7, name: "3.3 Final Report Documentation", sprint: "Sprint 3", float: 2, status: "To Do" }
-];
-
-function renderSprintTracker() {
-    const tbody = document.getElementById('sprint-tracker-list');
-    if(!tbody) return;
-    tbody.innerHTML = projectTasks.map(t => {
-        const isCritical = t.float === 0;
-        const criticalBadge = isCritical ? `<span style="background:var(--error-red); color:white; padding:4px 8px; border-radius:12px; font-size:0.75rem; font-weight:bold;">YES (Zero Float)</span>` : `<span style="color:var(--text-gray); font-weight:bold;">No</span>`;
-        
-        let statusColor = "var(--text-gray)";
-        if(t.status === "Done") statusColor = "var(--primary-color)";
-        if(t.status === "In Progress") statusColor = "#fca311";
-
-        return `<tr>
-            <td style="font-weight:bold; color:var(--text-dark);">${t.name}</td>
-            <td>${t.sprint}</td>
-            <td>${t.float} Days</td>
-            <td style="color:${statusColor}; font-weight:bold;">${t.status}</td>
-            <td>${criticalBadge}</td>
-        </tr>`;
-    }).join('');
-}
-
 function renderAdmin() {
     renderSprintTracker();
 
@@ -46,35 +14,89 @@ function renderAdmin() {
         <td><button onclick="adminDelete('${p.id}')" style="color:var(--error-red); background:none; border:none; cursor:pointer; font-size:1.3rem;"><i class="fas fa-trash-alt"></i></button></td>
     </tr>`).join('');
     
-    fetch('http://localhost:3000/api/orders/all')
-    .then(res => res.json())
-    .then(orders => {
-        if(Array.isArray(orders)) {
-            let globalRev = 0;
-            orders.forEach(o => globalRev += parseFloat(o.total));
-            document.getElementById('admin-revenue').innerText = `£${globalRev.toFixed(2)}`;
-            document.getElementById('admin-orders-count').innerText = orders.length;
-        }
+  
+    db.collection("orders").get()
+    .then(querySnapshot => {
+        let globalRev = 0;
+        let orderCount = 0;
+        querySnapshot.forEach(doc => {
+            globalRev += parseFloat(doc.data().total);
+            orderCount++;
+        });
+        document.getElementById('admin-revenue').innerText = `£${globalRev.toFixed(2)}`;
+        document.getElementById('admin-orders-count').innerText = orderCount;
     }).catch(err => {
-        document.getElementById('admin-revenue').innerText = "Backend Off";
+        console.error("Admin order fetch error:", err);
+        document.getElementById('admin-revenue').innerText = "Error";
         document.getElementById('admin-orders-count').innerText = "-";
     });
 }
 
+// 1. UPDATE STOCK IN FIREBASE
 function adminUpdateStock(id, val) {
     const p = products.find(x => String(x.id) === String(id));
     if(p) { 
-        p.stock = parseInt(val) || 0; 
-        localStorage.setItem('kcProducts', JSON.stringify(products)); 
-        showToast("Stock updated! (Locally)", "success"); 
+        const newStock = parseInt(val) || 0; 
+        
+        // Update the cloud document
+        db.collection("products").doc(String(id)).update({ stock: newStock })
+        .then(() => {
+            p.stock = newStock; // Update local array
+            showToast("Stock updated in Cloud!", "success"); 
+        })
+        .catch(err => {
+            console.error(err);
+            showToast("Error updating stock in cloud", "error");
+        });
     }
 }
 
+// 2. DELETE PRODUCT FROM FIREBASE
 function adminDelete(id) {
-    products = products.filter(x => String(x.id) !== String(id));
-    localStorage.setItem('kcProducts', JSON.stringify(products));
-    renderAdmin(); 
-    showToast("Product deleted. (Locally)", "success");
+    // Delete the document from the cloud
+    db.collection("products").doc(String(id)).delete()
+    .then(() => {
+        products = products.filter(x => String(x.id) !== String(id)); // Remove from local array
+        renderAdmin(); // Refresh UI
+        showToast("Product deleted from Cloud!", "success");
+    })
+    .catch(err => {
+        console.error(err);
+        showToast("Error deleting product", "error");
+    });
+}
+
+// 3. ADD NEW PRODUCT TO FIREBASE
+function adminAddProduct() {
+    const name = document.getElementById('add-name').value;
+    const cat = document.getElementById('add-cat').value;
+    const price = document.getElementById('add-price').value;
+    const stock = document.getElementById('add-stock').value || 10;
+    const img = document.getElementById('add-img').value || 'images/baby.jpg';
+    const desc = document.getElementById('add-desc').value || "A new cute craft addition.";
+    
+    if(!name || !price) return showToast("Name and Price are required", "error");
+    
+    const newId = Date.now().toString(); // Generate a unique ID based on the exact time
+    const newProd = { id: parseInt(newId), name, cat, price: parseFloat(price), stock: parseInt(stock), img, desc, reviews: [] };
+    
+    // Save the new product to the cloud
+    db.collection("products").doc(newId).set(newProd)
+    .then(() => {
+        products.push(newProd); // Update local array so it shows up instantly
+        
+        // Clear the input forms
+        ['name','cat','price','stock','img','desc'].forEach(id => { const el = document.getElementById('add-'+id); if(el) el.value = ''; });
+        document.getElementById('add-img-file').value = '';
+        document.getElementById('img-preview').style.display = 'none';
+        
+        renderAdmin(); 
+        showToast("Product added to Cloud!", "success");
+    })
+    .catch(err => {
+        console.error(err);
+        showToast("Error adding product to cloud", "error");
+    });
 }
 
 function previewImageFile() {

@@ -88,7 +88,6 @@ function logout() {
         showView('landing');
     });
 }
-
 // Listen for auth state changes
 auth.onAuthStateChanged(user => {
     if (user) {
@@ -104,10 +103,17 @@ auth.onAuthStateChanged(user => {
             adminBtn.classList.add('hidden');
             adminBtn.style.display = 'none';
         }
+
+        // NEW FIX: Now that Firebase confirms we are logged in, refresh the current data!
+        const currentHash = window.location.hash.substring(1);
+        if (currentHash === 'profile') renderProfile();
+        if (currentHash === 'cart') renderCart();
+
     } else {
         currentUser = null;
         document.getElementById('profile-name-nav').innerText = "Sign In";
-        document.getElementById('admin-nav-btn').classList.add('hidden');
+        const adminBtn = document.getElementById('admin-nav-btn');
+        if(adminBtn) adminBtn.classList.add('hidden');
     }
 });
 

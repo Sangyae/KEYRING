@@ -385,15 +385,6 @@
 
 <div id="admin-view" class="hidden container">
     <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Admin Dashboard 👑</h2>
-    
-    <div class="checkout-card" style="margin-bottom: 20px; overflow-x: auto; border-top: 4px solid var(--primary-color);">
-        <h3 style="margin-bottom: 10px; font-family: 'Poppins', sans-serif;">Agile Sprint & Critical Path Tracker 📊</h3>
-        <p style="color: var(--text-gray); font-size: 0.9rem; margin-bottom: 15px;">Monitor the Work Breakdown Structure (WBS) and Critical Path (Zero Float) as requested in Week 5 Project Planning.</p>
-        <table style="width: 100%;">
-            <thead><tr><th>Task (WBS)</th><th>Sprint</th><th>Float (Slack)</th><th>Status</th><th>Critical Path?</th></tr></thead>
-            <tbody id="sprint-tracker-list"></tbody>
-        </table>
-    </div>
 
     <div class="checkout-grid">
         <div class="checkout-card">
@@ -528,12 +519,12 @@
 
 <!-- Modular scripts - Load in order of dependencies -->
 <script src="modules/utils.js"></script>
-<!-- <script src="modules/auth.js"></script> -->
+<script src="modules/auth.js"></script>
 <script src="modules/shop.js"></script>
 <script src="modules/cart.js"></script>
 <script src="modules/wishlist.js"></script>
 <script src="modules/profile.js"></script>
-<!-- <script src="modules/admin.js"></script> -->
+<script src="modules/admin.js"></script>
 
 </body>
 </html>

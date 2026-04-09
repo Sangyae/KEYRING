@@ -76,3 +76,9 @@ window.addEventListener('hashchange', () => {
     const path = window.location.hash.slice(1) || 'landing';
     showView(path, false);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Look at the URL. If it says #shop, load shop. If empty, load landing.
+    let initialView = window.location.hash.substring(1) || 'landing';
+    showView(initialView, false);
+});

@@ -24,6 +24,7 @@ try {
     }
     auth = firebase.auth();
     db = firebase.firestore();
+    
 } catch(e) {
     console.warn("Firebase failed to initialise — running in offline/local mode.", e);
     // Provide stub so auth calls don't throw

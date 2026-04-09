@@ -3,24 +3,13 @@
 // Admin dashboard, Sprint tracker, Inventory management
 // =========================================================
 function renderAdmin() {
-    renderSprintTracker();
-
-    document.getElementById('admin-products-count').innerText = products.length;
-    document.getElementById('admin-inventory-list').innerHTML = products.map(p => `<tr>
-        <td><img src="${p.img}" onerror="this.src='baby.jpg'" style="width:45px; height:45px; object-fit:cover; border-radius:8px;"></td>
-        <td style="color:var(--text-dark); font-weight:bold;">${p.name}</td>
-        <td style="color:var(--primary-color); font-weight:bold;">£${Number(p.price).toFixed(2)}</td>
-        <td><input type="number" value="${p.stock}" onchange="adminUpdateStock('${p.id}', this.value)" style="width:70px; padding:8px; margin:0; border-radius:8px;"></td>
-        <td><button onclick="adminDelete('${p.id}')" style="color:var(--error-red); background:none; border:none; cursor:pointer; font-size:1.3rem;"><i class="fas fa-trash-alt"></i></button></td>
-    </tr>`).join('');
-    
-  
+    // 1. Fetch live orders to update Revenue and Order Count
     db.collection("orders").get()
     .then(querySnapshot => {
         let globalRev = 0;
         let orderCount = 0;
         querySnapshot.forEach(doc => {
-            globalRev += parseFloat(doc.data().total);
+            globalRev += parseFloat(doc.data().total) || 0;
             orderCount++;
         });
         document.getElementById('admin-revenue').innerText = `£${globalRev.toFixed(2)}`;
@@ -30,6 +19,29 @@ function renderAdmin() {
         document.getElementById('admin-revenue').innerText = "Error";
         document.getElementById('admin-orders-count').innerText = "-";
     });
+
+    // 2. Fetch live products to update the Inventory Table and Images
+    db.collection("products").get()
+    .then(querySnapshot => {
+        let cloudProducts = [];
+        querySnapshot.forEach(doc => {
+            cloudProducts.push({ id: parseInt(doc.id) || doc.id, ...doc.data() });
+        });
+        
+        // Sort them so they appear in numerical order (1, 2, 3...)
+        cloudProducts.sort((a,b) => parseInt(a.id) - parseInt(b.id));
+        
+        products = cloudProducts; // Sync global products variable
+
+        document.getElementById('admin-products-count').innerText = products.length;
+        document.getElementById('admin-inventory-list').innerHTML = products.map(p => `<tr>
+            <td><img src="${p.img}" onerror="this.src='images/baby.jpg'" style="width:45px; height:45px; object-fit:cover; border-radius:8px;"></td>
+            <td style="color:var(--text-dark); font-weight:bold;">${p.name}</td>
+            <td style="color:var(--primary-color); font-weight:bold;">£${Number(p.price).toFixed(2)}</td>
+            <td><input type="number" value="${p.stock}" onchange="adminUpdateStock('${p.id}', this.value)" style="width:70px; padding:8px; margin:0; border-radius:8px;"></td>
+            <td><button onclick="adminDelete('${p.id}')" style="color:var(--error-red); background:none; border:none; cursor:pointer; font-size:1.3rem;"><i class="fas fa-trash-alt"></i></button></td>
+        </tr>`).join('');
+    }).catch(err => console.error("Admin products fetch error:", err));
 }
 
 // 1. UPDATE STOCK IN FIREBASE

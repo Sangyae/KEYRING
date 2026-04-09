@@ -33,23 +33,13 @@ function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
     .then((result) => {
-        currentUser = result.user.email;
-        showToast(`Welcome via Google, ${result.user.displayName}!`, "success");
+        // FORCE the app to recognize the user immediately 
+        currentUser = result.user.email || result.user.uid;
+        
+        showToast(`Welcome via Google!`, "success");
         showView('shop');
     }).catch((error) => {
         showToast(error.message, "error");
-    });
-}
-
-function signInWithFacebook() {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    auth.signInWithPopup(provider)
-    .then((result) => {
-        currentUser = result.user.email;
-        showToast(`Welcome via Facebook, ${result.user.displayName}!`, "success");
-        showView('shop');
-    }).catch((error) => {
-        showToast("Facebook login: Make sure it's enabled in Firebase Console. " + error.message, "error");
     });
 }
 
@@ -57,11 +47,13 @@ function signInWithGitHub() {
     const provider = new firebase.auth.GithubAuthProvider();
     auth.signInWithPopup(provider)
     .then((result) => {
-        currentUser = result.user.email;
-        showToast(`Welcome via GitHub, ${result.user.displayName}!`, "success");
+        // FORCE the app to recognize the user immediately, even if email is hidden
+        currentUser = result.user.email || result.user.uid;
+        
+        showToast(`Welcome via GitHub!`, "success");
         showView('shop');
     }).catch((error) => {
-        showToast("GitHub login: Make sure it's enabled in Firebase Console. " + error.message, "error");
+        showToast("GitHub login error: " + error.message, "error");
     });
 }
 

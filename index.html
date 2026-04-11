@@ -188,12 +188,7 @@
 </div>
 
 <div id="login-view" class="hidden">
-    <div class="login-header" style="background: var(--primary-color); padding: 1.5rem 5%; display: flex; align-items: center; box-shadow: 0 4px 15px rgba(242, 106, 68, 0.2);">
-        <a href="#" onclick="showView('landing')" class="login-logo" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-size: 1.5rem; font-weight: 800; font-family: 'Poppins', sans-serif;">
-            <i class="fas fa-paw" style="background: white; color: var(--primary-color); padding: 8px 10px; border-radius: 12px; font-size: 1.2rem;"></i>
-            Tiny Crafts
-        </a>
-    </div>
+    
     <div class="auth-container" id="auth-container">
         
         <div class="form-container sign-up-container">
@@ -414,18 +409,19 @@
             <tbody id="admin-orders-list"></tbody>
         </table>
     </div>
+</div>
     <div id="inventory-view" class="hidden container">
-    <button class="btn-cancel" style="margin-bottom: 20px;" onclick="showView('admin')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
-    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Inventory Manager 📦</h2>
-    
-    <div class="checkout-card" style="overflow-x: auto;">
-        <table style="width: 100%;">
+        <button class="btn-cancel" style="margin-bottom: 20px;" onclick="showView('admin')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+        <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Inventory Manager 📦</h2>
+        <div style="margin-bottom: 20px; text-align: right;">
+            <input type="text" id="inventory-search" placeholder="Search crafts by name..." onkeyup="filterInventory()" style="width: 100%; max-width: 300px; padding: 12px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Poppins', sans-serif;">
+        </div>
+        <div class="checkout-card" style="overflow-x: auto;">
+            <table style="width: 100%;">
             <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
-            <tbody id="admin-inventory-list"></tbody>
+            <tbody id="inventory-page-list"></tbody>
         </table>
     </div>
-</div>
-
 </div>
 
 <div id="wishlist-view" class="hidden container">

@@ -70,6 +70,11 @@ function logout() {
         currentUser = null;
         cart = [];
         wishlist = [];
+        
+        // THE FIX: Wipe the browser's physical memory clean!
+        localStorage.removeItem('kcCart');
+        localStorage.removeItem('kcWishlist');
+        
         document.getElementById('cart-total-nav').innerText = "0.00";
         document.getElementById('wish-count').innerText = "0";
         if(authContainer) authContainer.classList.remove("right-panel-active"); 

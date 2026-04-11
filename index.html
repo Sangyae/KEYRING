@@ -202,7 +202,6 @@
                 
                 <div class="social-container">
                     <button type="button" class="google" onclick="signInWithGoogle()" aria-label="Sign in with Google"><i class="fab fa-google"></i></button>
-                    <button type="button" class="facebook" onclick="signInWithFacebook()" aria-label="Sign in with Facebook"><i class="fab fa-facebook-f"></i></button>
                     <button type="button" class="github" onclick="signInWithGitHub()" aria-label="Sign in with GitHub"><i class="fab fa-github"></i></button>
                 </div>
                 <div class="divider">OR USE EMAIL</div>
@@ -385,6 +384,12 @@
 <div id="admin-view" class="hidden container">
     <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Admin Dashboard 👑</h2>
 
+    <div class="checkout-card" style="margin-top: 20px; text-align: center;">
+        <h3 style="margin-bottom: 10px;">Manage Inventory</h3>
+        <p style="color: var(--text-gray); margin-bottom: 15px;">View, edit stock, and delete your products</p>
+        <button class="btn-primary" style="width: auto; padding: 10px 30px;" onclick="showView('inventory')">Open Inventory Manager <i class="fas fa-boxes" style="margin-left: 8px;"></i></button>
+    </div>
+
     <div class="checkout-grid">
         <div class="checkout-card">
             <h3 style="margin-bottom: 15px;">Global Stats</h3>
@@ -393,39 +398,34 @@
             <p style="margin-top: 10px;">Total Orders: <strong id="admin-orders-count">0</strong></p>
             <p style="margin-top: 10px;">Total Products: <strong id="admin-products-count">0</strong></p>
         </div>
-        <div class="checkout-card">
-            <h3 style="margin-bottom: 15px;">Add New Craft</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <input type="text" id="add-name" placeholder="Product Name">
-                <input type="number" id="add-price" placeholder="Price (£)">
-                <select id="add-cat">
-                    <option value="Animals">Animals & Wildlife</option>
-                    <option value="Food & Plants">Food & Plants</option>
-                    <option value="Pop Culture & Fun">Pop Culture & Fun</option>
-                    <option value="Symbols & Charms">Symbols & Charms</option>
-                </select>
-                <input type="number" id="add-stock" placeholder="Stock">
-            </div>
-            <div style="margin-top: 10px;">
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark);">Upload Product Image:</label>
-                <input type="file" id="add-img-file" accept="image/*" onchange="previewImageFile()" style="padding: 8px; border: 1px solid var(--border-color); border-radius: 8px; width: 100%; margin-bottom: 10px;">
-                <div id="img-preview" style="display: none; text-align: center; margin-bottom: 10px;">
-                    <img id="preview-img" src="" style="max-width: 150px; max-height: 150px; border-radius: 8px; object-fit: cover;">
-                    <p id="img-filename" style="margin-top: 8px; color: var(--text-gray); font-size: 0.9rem;"></p>
-                </div>
-                <input type="hidden" id="add-img">
-            </div>
-            <input type="text" id="add-desc" placeholder="Description">
-            <button class="btn-primary" style="margin-top: 10px;" onclick="adminAddProduct()">Save Product</button>
-        </div>
+        
     </div>
     <div class="checkout-card" style="margin-top: 20px; overflow-x: auto;">
-        <h3 style="margin-bottom: 15px;">Manage Inventory</h3>
+        <h3 style="margin-bottom: 15px;">Manage Orders 📦</h3>
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="admin-orders-list"></tbody>
+        </table>
+    </div>
+    <div id="inventory-view" class="hidden container">
+    <button class="btn-cancel" style="margin-bottom: 20px;" onclick="showView('admin')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Inventory Manager 📦</h2>
+    
+    <div class="checkout-card" style="overflow-x: auto;">
         <table style="width: 100%;">
             <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
             <tbody id="admin-inventory-list"></tbody>
         </table>
     </div>
+</div>
+
 </div>
 
 <div id="wishlist-view" class="hidden container">

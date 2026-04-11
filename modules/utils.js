@@ -38,7 +38,7 @@ if (localStorage.getItem('kcTheme') === 'dark') {
 }
 
 function showView(viewId, addToHistory = true) {
-    ['landing-view', 'login-view', 'shop-view', 'cart-view', 'checkout-view', 'profile-view', 'wishlist-view', 'admin-view', 'about-view'].forEach(v => { 
+    ['landing-view', 'login-view', 'shop-view', 'cart-view', 'checkout-view', 'profile-view', 'wishlist-view', 'admin-view', 'inventory-view', 'about-view'].forEach(v => { 
         const el = document.getElementById(v);
         if(el) el.classList.add('hidden'); 
     });
@@ -60,6 +60,7 @@ function showView(viewId, addToHistory = true) {
     if (viewId === 'profile') renderProfile();
     if (viewId === 'wishlist') renderWishlist();
     if (viewId === 'admin') renderAdmin();
+    if (viewId === 'inventory') renderInventory();
     
     document.getElementById('cart-total-nav').innerText = getCartTotal().toFixed(2);
     document.getElementById('wish-count').innerText = wishlist.length;

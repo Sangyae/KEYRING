@@ -19,18 +19,21 @@ function renderAdmin() {
             
             const currentStatus = o.status || 'Processing';
 
-            ordersHTML += `
+           ordersHTML += `
             <tr>
-                <td style="font-size:0.85rem; color:var(--text-gray);">#${doc.id.substring(0,8)}</td>
-                <td style="font-size:0.85rem; font-weight:bold;">${o.userEmail}</td>
-                <td style="color:var(--primary-color); font-weight:bold;">£${Number(o.total).toFixed(2)}</td>
-                <td>
+                <td data-label="Order ID" style="font-size:0.85rem; color:var(--text-gray);">#${doc.id.substring(0,8)}</td>
+                <td data-label="Customer" style="font-size:0.85rem; font-weight:bold;">${o.userEmail}</td>
+                <td data-label="Total" style="color:var(--primary-color); font-weight:bold;">£${Number(o.total).toFixed(2)}</td>
+                <td data-label="Status">
                     <select onchange="adminUpdateOrderStatus('${doc.id}', this.value)" style="width: 130px; padding:6px; margin:0; border-radius:8px; font-size:0.85rem; background: var(--input-bg);">
                         <option value="Processing" ${currentStatus === 'Processing' ? 'selected' : ''}>Processing</option>
                         <option value="Shipped" ${currentStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
                         <option value="Delivered" ${currentStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
                         <option value="Cancelled" ${currentStatus === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                     </select>
+                </td>
+                <td data-label="Action">
+                    <button onclick="adminDeleteOrder('${doc.id}')" style="color:var(--error-red); background:none; border:none; cursor:pointer; font-size:1.3rem; transition:0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"><i class="fas fa-trash-alt"></i></button>
                 </td>
             </tr>`;
         });
@@ -113,6 +116,20 @@ function adminUpdateOrderStatus(orderId, newStatus) {
         console.error(err);
         showToast("Error updating order status", "error");
     });
+}
+// NEW: Delete an order from the database
+function adminDeleteOrder(orderId) {
+    if(confirm("Are you sure you want to permanently delete this order?")) {
+        db.collection("orders").doc(orderId).delete()
+        .then(() => {
+            showToast("Order permanently deleted!", "success");
+            renderAdmin(); // Refresh the dashboard instantly
+        })
+        .catch(err => {
+            console.error(err);
+            showToast("Error deleting order", "error");
+        });
+    }
 }
 // 5. RENDER DEDICATED INVENTORY PAGE
 function renderInventory() {

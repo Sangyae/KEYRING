@@ -28,20 +28,44 @@ function getCartTotal() {
 function applyPromo() {
     const codeEl = document.getElementById('promo-input');
     const msgEl = document.getElementById('promo-msg');
-    const code = codeEl.value.trim().toUpperCase();
-    
+    const code = codeEl ? codeEl.value.trim().toUpperCase() : '';
+
     if (code === 'CUTE20') { 
-        discountMultiplier = 0.8; 
-        msgEl.innerText = "20% Off Applied!"; 
-        msgEl.style.color = "var(--primary-color)"; 
+        if (isSubscriber) {
+            // Subscriber + Code = 30% Off!
+            discountMultiplier = 0.7; 
+            if(msgEl) {
+                msgEl.innerText = "30% Off Applied! (Subscriber Bonus Included)"; 
+                msgEl.style.color = "var(--primary-color)"; 
+            }
+        } else {
+            // Normal User + Code = 20% Off
+            discountMultiplier = 0.8; 
+            if(msgEl) {
+                msgEl.innerText = "20% Off Applied!"; 
+                msgEl.style.color = "var(--primary-color)"; 
+            }
+        }
         showToast("Promo code applied!", "success"); 
     } else { 
-        discountMultiplier = 1; 
-        msgEl.innerText = "Invalid code."; 
-        msgEl.style.color = "var(--error-red)"; 
+        // Invalid code or empty box
+        if (code && msgEl) {
+            msgEl.innerText = "Invalid code."; 
+            msgEl.style.color = "var(--error-red)"; 
+            discountMultiplier = isSubscriber ? 0.9 : 1.0;
+        } else {
+            // No code typed, just check if they get the automatic 10%
+            discountMultiplier = isSubscriber ? 0.9 : 1.0;
+            if (msgEl) {
+                msgEl.innerText = isSubscriber ? "10% Subscriber Discount Active!" : "";
+                msgEl.style.color = isSubscriber ? "var(--primary-color)" : "inherit";
+            }
+        }
     }
+    
     renderCart(); 
-    document.getElementById('cart-total-nav').innerText = (getCartTotal() * discountMultiplier).toFixed(2);
+    const totalNav = document.getElementById('cart-total-nav');
+    if (totalNav) totalNav.innerText = (getCartTotal() * discountMultiplier).toFixed(2);
 }
 
 function renderCart() {
@@ -135,9 +159,13 @@ function flipCard(flipped) {
 function renderCheckout() {
     const summary = document.getElementById('order-summary-list');
     summary.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom: 8px; color:var(--text-dark); padding-bottom:8px; border-bottom:1px solid var(--border-color);"><span><strong>${i.qty}x</strong> ${i.name}</span><span style="font-weight:bold; color:var(--primary-color);">£${(Number(i.price) * i.qty).toFixed(2)}</span></div>`).join('');
+    
+    //Dynamically calculate the discount percentage so it matches the cart!
     if (discountMultiplier < 1) {
-        summary.innerHTML += `<div style="display:flex; justify-content:space-between; color:var(--error-red); margin-top:10px; font-weight:bold;"><span>Promo Code</span><span>-20%</span></div>`;
+        const percentOff = Math.round((1 - discountMultiplier) * 100);
+        summary.innerHTML += `<div style="display:flex; justify-content:space-between; color:var(--error-red); margin-top:10px; font-weight:bold;"><span>Discount</span><span>-${percentOff}%</span></div>`;
     }
+    
     document.getElementById('checkout-total-btn').innerText = (getCartTotal() * discountMultiplier).toFixed(2);
 }
 

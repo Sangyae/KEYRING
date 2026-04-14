@@ -1,17 +1,27 @@
-// =========================================================
-// AUTHENTICATION MODULE
-// Sign in, Register, Logout, Social Auth
-// =========================================================
-
 function registerUser(event) {
     event.preventDefault(); 
-    const email = document.getElementById('reg-email').value;
+    const email = document.getElementById('reg-email').value.trim();
     const pass = document.getElementById('reg-pass').value;
     
     auth.createUserWithEmailAndPassword(email, pass)
-        .then(() => {
-            showToast("Account created successfully!", "success");
-            toggleMobileAuth(event, false); 
+        .then((result) => {
+            const user = result.user;
+            
+            // NEW FIX: Create their profile in the database!
+            db.collection("users").doc(user.uid).set({
+                email: user.email,
+                userType: 'Customer', // Normal email signups are always customers
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                showToast("Account created successfully!", "success");
+                toggleMobileAuth(event, false); 
+            })
+            .catch(dbError => {
+                console.error("Auth succeeded but DB save failed:", dbError);
+                showToast("Account created successfully!", "success");
+                toggleMobileAuth(event, false); 
+            });
         })
         .catch((error) => { showToast(error.message, "error"); });
 }
@@ -22,38 +32,82 @@ function loginUser(event) {
     const pass = document.getElementById('login-pass').value.trim();
     
     auth.signInWithEmailAndPassword(email, pass)
-        .then(() => {
-            showToast(`Welcome back, ${email.split('@')[0]}!`, "success");
-            showView('shop');
+        .then((result) => {
+            const user = result.user;
+            
+            // THE FIX: "Just-In-Time Migration" for old existing users!
+            // { merge: true } ensures we don't accidentally overwrite data if they already exist
+            db.collection("users").doc(user.uid).set({
+                email: user.email,
+                userType: user.email === 'admin@tinycrafts.com' ? 'Admin' : 'Customer',
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true }) 
+            .then(() => {
+                showToast(`Welcome back, ${user.email.split('@')[0]}!`, "success");
+                showView('shop');
+            })
+            .catch(dbError => {
+                console.warn("DB update failed but login continues.", dbError);
+                showToast(`Welcome back, ${user.email.split('@')[0]}!`, "success");
+                showView('shop');
+            });
         })
         .catch((error) => { showToast(error.message, "error"); });
 }
 
+// GOOGLE LOGIN FIX
 function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-    .then((result) => {
-        // FORCE the app to recognize the user immediately 
-        currentUser = result.user.email || result.user.uid;
+    auth.signInWithPopup(provider).then((result) => {
+        const user = result.user;
+        const safeEmail = user.email || "No Email Provided";
         
-        showToast(`Welcome via Google!`, "success");
-        showView('shop');
-    }).catch((error) => {
-        showToast(error.message, "error");
+        db.collection("users").doc(user.uid).set({
+            email: safeEmail,
+            userType: safeEmail === 'admin@tinycrafts.com' ? 'Admin' : 'Customer',
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }) 
+        .then(() => {
+            showToast("Logged in with Google!", "success");
+            showView('shop');
+        })
+        .catch(dbError => {
+            console.warn("DB rules blocked user save, but login continues.", dbError);
+            showToast("Logged in safely!", "success");
+            showView('shop');
+        });
+
+    }).catch(error => {
+        console.error(error);
+        showToast("Google Sign-In Failed.", "error");
     });
 }
 
+// GITHUB LOGIN FIX
 function signInWithGitHub() {
     const provider = new firebase.auth.GithubAuthProvider();
-    auth.signInWithPopup(provider)
-    .then((result) => {
-        // FORCE the app to recognize the user immediately, even if email is hidden
-        currentUser = result.user.email || result.user.uid;
+    auth.signInWithPopup(provider).then((result) => {
+        const user = result.user;
+        const safeEmail = user.email || "No Email Provided";
         
-        showToast(`Welcome via GitHub!`, "success");
-        showView('shop');
-    }).catch((error) => {
-        showToast("GitHub login error: " + error.message, "error");
+        db.collection("users").doc(user.uid).set({
+            email: safeEmail,
+            userType: safeEmail === 'admin@tinycrafts.com' ? 'Admin' : 'Customer',
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }) 
+        .then(() => {
+            showToast("Logged in with GitHub!", "success");
+            showView('shop');
+        })
+        .catch(dbError => {
+            console.warn("DB rules blocked user save, but login continues.", dbError);
+            showToast("Logged in safely!", "success");
+            showView('shop');
+        });
+
+    }).catch(error => {
+        console.error(error);
+        showToast("GitHub Sign-In Failed.", "error");
     });
 }
 
@@ -71,7 +125,6 @@ function logout() {
         cart = [];
         wishlist = [];
         
-        // THE FIX: Wipe the browser's physical memory clean!
         localStorage.removeItem('kcCart');
         localStorage.removeItem('kcWishlist');
         
@@ -85,15 +138,35 @@ function logout() {
         showView('landing');
     });
 }
+
 // Listen for auth state changes
 auth.onAuthStateChanged(user => {
     if (user) {
-        currentUser = user.email;
-        document.getElementById('profile-name-nav').innerText = user.displayName || user.email.split('@')[0];
-        document.getElementById('profile-name-display-card').innerText = user.displayName || user.email.split('@')[0];
+        currentUser = user.email || user.uid; 
+        
+        //Check if they are a subscriber!
+        if (user.email) {
+            db.collection("subscribers").doc(user.email.toLowerCase()).get()
+            .then(doc => {
+                isSubscriber = doc.exists;
+                if(typeof applyPromo === 'function') applyPromo(); // Refresh cart prices
+            });
+        }
+        const fallbackName = user.email ? user.email.split('@')[0] : "Crafter";
+        const displayName = user.displayName || fallbackName;
+        
+        document.getElementById('profile-name-nav').innerText = displayName;
+        document.getElementById('profile-name-display-card').innerText = displayName;
+        
+        // NEW FIX: Update the button on the landing page!
+        const landingBtn = document.getElementById('landing-auth-btn');
+        if(landingBtn) {
+            landingBtn.innerHTML = `<i class="fas fa-user"></i> ${displayName}`;
+            landingBtn.onclick = () => showView('profile');
+        }
         
         const adminBtn = document.getElementById('admin-nav-btn');
-        if (user.email === "admin@keyringcrafters.com" || user.email === "admin@tinycrafts.com") {
+        if (user.email === "admin@tinycrafts.com") {
             adminBtn.classList.remove('hidden');
             adminBtn.style.display = 'flex';
         } else {
@@ -101,7 +174,6 @@ auth.onAuthStateChanged(user => {
             adminBtn.style.display = 'none';
         }
 
-        // NEW FIX: Now that Firebase confirms we are logged in, refresh the current data!
         const currentHash = window.location.hash.substring(1);
         if (currentHash === 'profile') renderProfile();
         if (currentHash === 'cart') renderCart();
@@ -111,6 +183,13 @@ auth.onAuthStateChanged(user => {
         document.getElementById('profile-name-nav').innerText = "Sign In";
         const adminBtn = document.getElementById('admin-nav-btn');
         if(adminBtn) adminBtn.classList.add('hidden');
+        
+        // NEW FIX: Reset the landing page button if they log out
+        const landingBtn = document.getElementById('landing-auth-btn');
+        if(landingBtn) {
+            landingBtn.innerText = "Sign In";
+            landingBtn.onclick = () => showView('login');
+        }
     }
 });
 

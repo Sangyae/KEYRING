@@ -51,11 +51,20 @@ function showView(viewId, addToHistory = true) {
     // 3. Handle Header
     const mainHeader = document.getElementById('main-header');
     if(mainHeader) {
-        // REMOVED 'login' from this list!
         if(viewId === 'landing' || viewId === 'about') {
             mainHeader.classList.add('hidden');
         } else {
             mainHeader.classList.remove('hidden');
+            
+        //  Hide the nav links on the login screen, but keep the Logo!
+            const navLinks = mainHeader.querySelector('nav');
+            if(navLinks) {
+                if(viewId === 'login') {
+                    navLinks.classList.add('hidden');
+                } else {
+                    navLinks.classList.remove('hidden');
+                }
+            }
         }
     }
 
@@ -98,3 +107,30 @@ document.addEventListener("DOMContentLoaded", () => {
     let initialView = window.location.hash.substring(1) || 'landing';
     showView(initialView, false);
 });
+
+// Save email to database and check if they get an instant discount
+function subscribeNewsletter(event) {
+    event.preventDefault();
+    const emailInput = document.getElementById('newsletter-email');
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!email) return;
+
+    db.collection("subscribers").doc(email).set({
+        subscribedAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        showToast("Subscribed! 10% off applied to your account.", "success");
+        emailInput.value = '';
+        
+        // If they are currently logged in with this email, apply the discount instantly!
+        if (currentUser && currentUser.toLowerCase() === email) {
+            isSubscriber = true;
+            if(typeof applyPromo === 'function') applyPromo(); 
+        }
+    })
+    .catch(err => {
+        console.error("Subscription error:", err);
+        showToast("Error subscribing. Please try again.", "error");
+    });
+}

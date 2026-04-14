@@ -38,12 +38,12 @@
                 <i class="fas fa-paw"></i> Tiny Crafts
             </a>
             <nav class="landing-nav">
-                <a href="#" onclick="showView('landing')" style="color: white;">Home</a>
-                <a href="#" onclick="showView('shop')">Shop All</a>
-                <a href="#" onclick="showView('about')">Our Story</a>
+                <a href="javascript:void(0)" onclick="showView('landing')" style="color: white;">Home</a>
+                <a href="javascript:void(0)" onclick="showView('shop')">Shop All</a>
+                <a href="javascript:void(0)" onclick="showView('about')">Our Story</a>
             </nav>
             <div style="display: flex; gap: 1rem; align-items: center;">
-                <button class="landing-btn-secondary" onclick="showView('login')">Sign In</button>
+                <button id="landing-auth-btn" class="landing-btn-secondary" onclick="showView('login')">Sign In</button>
             </div>
         </header>
 
@@ -57,13 +57,7 @@
             
             <div class="fsg-visual">
                 <img src="images/banner4.jpg" alt="Collection of cute felt keyrings" onerror="this.src='https://images.unsplash.com/photo-1596489397682-3d719ceea1eb?auto=format&fit=crop&w=1000&q=80'">
-                <div class="floating-badge" style="bottom: 15px; left: 15px; z-index: 3;">
-                    <div class="badge-icon" style="background: #F9D531; color: #2b2d42;"><i class="fas fa-smile"></i></div>
-                    <div class="badge-text" style="text-align: left;">
-                        <h4 class="landing-font">Fairtrade</h4>
-                        <p class="landing-font">Guaranteed</p>
-                    </div>
-                </div>
+                
             </div>
         </main>
     </div>
@@ -151,8 +145,8 @@
                 <h2>Join the Tiny Crafts Club!</h2>
                 <p>Subscribe for 10% off your first order, plus updates on new fluffy friends.</p>
             </div>
-            <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Thanks for subscribing!', 'success'); this.reset();">
-                <input type="email" placeholder="Enter your email address" required>
+            <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                <input type="email" id="newsletter-email" placeholder="Enter your email address" required>
                 <button type="submit">Subscribe</button>
             </form>
         </div>
@@ -171,20 +165,46 @@
 </div>
 
 <div id="about-view" class="hidden container">
-    <h2 style="color: var(--text-dark); margin-bottom: 20px; font-family: 'Poppins', sans-serif;">About Tiny Crafts 🧶</h2>
-    <div class="checkout-card" style="line-height: 1.8;">
-        <h3 style="color: var(--primary-color); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Our Passion</h3>
-        <p style="color: var(--text-gray); margin-bottom: 20px;">
-            Welcome to Tiny Crafts! We specialize in creating the cutest, highest-quality needle-felted keyrings. Whether you love woodland animals, pop-culture icons, or sweet treats, we have a tiny companion for your keys or backpack.
-        </p>
-        <h3 style="color: var(--primary-color); margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Why Choose Us?</h3>
-        <ul style="color: var(--text-gray); margin-left: 20px; margin-bottom: 20px;">
-            <li style="margin-bottom: 10px;"><strong>Handmade Charm:</strong> Every single item is uniquely crafted, meaning no two pandas or sloths are exactly alike!</li>
-            <li style="margin-bottom: 10px;"><strong>Soft & Durable:</strong> Our felted wool is tightly packed to endure the daily bumping of keys and bags.</li>
-            <li style="margin-bottom: 10px;"><strong>Independent Makers:</strong> By shopping with us, you are supporting independent artists.</li>
-        </ul>
-        <button class="btn-primary" style="width: auto; padding: 10px 25px;" onclick="showView('login')">Sign In to Start Shopping</button>
+    
+    <div class="checkout-card" style="margin-bottom: 30px; text-align: center;">
+        <h2 style="color: var(--primary-color); font-family: 'Poppins', sans-serif; font-size: 2.5rem; margin-bottom: 10px;">The Magic Behind the Fluff 🧶</h2>
+        <p style="color: var(--text-gray); font-size: 1.1rem; max-width: 800px; margin: 0 auto;">From a fluffy cloud of wool to a tiny companion on your keys—this is how Tiny Crafts come to life.</p>
     </div>
+
+    <div class="checkout-card" style="display: flex; gap: 40px; align-items: center; margin-bottom: 30px; flex-wrap: wrap;">
+        <img src="images/baby.jpg" alt="Hands crafting" style="border-radius: 20px; width: 100%; max-width: 400px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+        <div style="flex: 1; min-width: 300px;">
+            <h3 style="color: var(--text-dark); font-family: 'Poppins', sans-serif; margin-bottom: 15px; font-size: 1.8rem;">Meet the Makers</h3>
+            <p style="color: var(--text-gray); margin-bottom: 15px; line-height: 1.8;">
+                Tiny Crafts isn't a giant factory; we are a close-knit family. We partner directly with a cooperative of <strong>25 incredibly skilled artisans</strong>. By working closely with these makers, we ensure they receive fair, living wages and craft in safe, joyful environments.
+            </p>
+            <p style="color: var(--text-gray); line-height: 1.8;">
+                Every single stitch, poke, and detail is crafted by human hands. It takes years of practice to master the art of shaping wool, and our team pours their heart into every single character.
+            </p>
+        </div>
+    </div>
+
+    <div class="checkout-card" style="display: flex; gap: 40px; align-items: center; margin-bottom: 30px; flex-wrap: wrap-reverse;">
+        <div style="flex: 1; min-width: 300px;">
+            <h3 style="color: var(--text-dark); font-family: 'Poppins', sans-serif; margin-bottom: 15px; font-size: 1.8rem;">The Needle-Felting Journey</h3>
+            <ol style="color: var(--text-gray); line-height: 1.8; margin-left: 20px;">
+                <li style="margin-bottom: 10px;"><strong>Cruelty-Free Sourcing:</strong> We start with 100% natural, cruelty-free wool. It is soft, sustainable, and completely biodegradable.</li>
+                <li style="margin-bottom: 10px;"><strong>Eco-Dyeing:</strong> The wool is dyed using vibrant, non-toxic colors to ensure our pandas are perfectly black and white, and our avocados are perfectly green.</li>
+                <li style="margin-bottom: 10px;"><strong>The Magic of the Needle:</strong> Using a specialized barbed needle, our artisans repeatedly poke the fluffy wool. The barbs catch the fibers, tangling them together until they slowly sculpt into a solid, adorable shape. It takes thousands of pokes to make just one craft!</li>
+            </ol>
+        </div>
+        <img src="images/keyring2.jpg" alt="Colorful wool" style="border-radius: 20px; width: 100%; max-width: 400px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+    </div>
+
+    <div class="checkout-card" style="text-align: center;">
+        <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;"><i class="fas fa-box-open"></i></div>
+        <h3 style="color: var(--text-dark); font-family: 'Poppins', sans-serif; margin-bottom: 15px; font-size: 1.8rem;">From Our Hands to Your Keys</h3>
+        <p style="color: var(--text-gray); margin-bottom: 25px; line-height: 1.8; max-width: 800px; margin-left: auto; margin-right: auto;">
+            Once a keyring is finished, it undergoes a careful quality check to ensure it is durable enough for daily bumping on bags and keys. Finally, it is wrapped in 100% plastic-free, recyclable packaging and shipped off to its forever home—ready to bring a tiny pop of joy to your day!
+        </p>
+        <button class="btn-primary" style="width: auto; padding: 14px 40px; border-radius: 50px; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(242, 106, 68, 0.2);" onclick="showView('shop')">Adopt a Tiny Craft <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+    </div>
+
 </div>
 
 <div id="login-view" class="hidden">
@@ -218,7 +238,7 @@
                 </div>
                 <div class="divider">OR USE EMAIL</div>
 
-                <span style="color: var(--text-gray); margin-bottom: 10px; font-size: 0.85rem;">Hint: Admin users login with <b>admin@keyringcrafters.com</b></span>
+                <span style="color: var(--text-gray); margin-bottom: 10px; font-size: 0.85rem;">Hint: Admin users login with <b>admin@tinycrafts.com</b></span>
                 <input type="email" id="login-user" placeholder="Email Address" required />
                 <input type="password" id="login-pass" placeholder="Password" required />
                 <button type="submit" style="background: var(--primary-color); color: white; border: none; padding: 14px 40px; border-radius: 50px; width: 100%; margin-top: 15px; font-weight: 700; font-size: 1rem; font-family: 'Poppins', sans-serif; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(242, 106, 68, 0.3);" onmouseover="this.style.background='var(--primary-hover)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 30px rgba(242, 106, 68, 0.4)'" onmouseout="this.style.background='var(--primary-color)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(242, 106, 68, 0.3)'">Sign In</button>
@@ -304,8 +324,11 @@
                 <h3 style="margin-bottom: 15px;">Delivery Details</h3>
                 <input type="text" id="checkout-name" placeholder="Full Name">
                 <input type="text" id="checkout-address" placeholder="Full Shipping Address">
-                <br><br>
-                <button class="btn-primary" onclick="nextCheckoutStep(2)">Proceed to Payment</button>
+                
+                <div style="display:flex; gap:10px; margin-top: 20px;">
+                    <button class="btn-cancel" onclick="showView('cart')" style="width: 50%;">Back to Basket</button>
+                    <button class="btn-primary" onclick="nextCheckoutStep(2)" style="width: 50%;">Proceed to Payment</button>
+                </div>
             </div>
             <div id="checkout-step-2" class="hidden">
                 <h3 style="margin-bottom: 15px;">Payment Details</h3>
@@ -404,6 +427,7 @@
                     <th>Customer</th>
                     <th>Total</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="admin-orders-list"></tbody>

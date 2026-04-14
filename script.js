@@ -48,6 +48,7 @@ let orderHistory = JSON.parse(localStorage.getItem('kcOrders')) || [];
 let discountMultiplier = 1;
 let currentUser = null; 
 let activeProductId = null;
+let isSubscriber = false;
 
 const defaultProducts = [
     { id: 1, name: "Baby Penguin Felt Keyring", cat: "Animals", price: 12.00, stock: 20, desc: "An adorable hand-felted baby penguin to keep you company.", img: "images/baby.jpg", reviews: [] },

@@ -38,7 +38,13 @@ if (localStorage.getItem('kcTheme') === 'dark') {
 }
 
 function showView(viewId, addToHistory = true) {
-    // 1. Hide all views (Now includes 'inventory-view')
+    // NEW FIX: If logged-out users click "Sign In" on the header, actually send them to login!
+    if (viewId === 'profile' && !currentUser) {
+        showView('login', false);
+        return;
+    }
+
+    // 1. Hide all views
     ['landing-view', 'login-view', 'shop-view', 'cart-view', 'checkout-view', 'profile-view', 'wishlist-view', 'admin-view', 'inventory-view', 'about-view'].forEach(v => { 
         const el = document.getElementById(v);
         if(el) el.classList.add('hidden'); 
@@ -51,24 +57,30 @@ function showView(viewId, addToHistory = true) {
     // 3. Handle Header
     const mainHeader = document.getElementById('main-header');
     if(mainHeader) {
-        if(viewId === 'landing' || viewId === 'about') {
+        if(viewId === 'landing') {
             mainHeader.classList.add('hidden');
+            mainHeader.classList.remove('minimal-nav');
         } else {
             mainHeader.classList.remove('hidden');
             
-        //  Hide the nav links on the login screen, but keep the Logo!
             const navLinks = mainHeader.querySelector('nav');
             if(navLinks) {
                 if(viewId === 'login') {
                     navLinks.classList.add('hidden');
+                    mainHeader.classList.remove('minimal-nav');
+                } else if(viewId === 'about') {
+                    // MINIMAL MODE: Show nav, but activate CSS to hide extra buttons!
+                    navLinks.classList.remove('hidden');
+                    mainHeader.classList.add('minimal-nav'); 
                 } else {
                     navLinks.classList.remove('hidden');
+                    mainHeader.classList.remove('minimal-nav');
                 }
             }
         }
     }
 
-    // 4. Handle Footer (Hides on Admin & Inventory)
+    // 4. Handle Footer
     const mainFooter = document.querySelector('footer');
     if(mainFooter) {
         if(viewId === 'admin' || viewId === 'inventory') {
@@ -84,10 +96,13 @@ function showView(viewId, addToHistory = true) {
     if (viewId === 'profile') renderProfile();
     if (viewId === 'wishlist') renderWishlist();
     if (viewId === 'admin') renderAdmin();
-    if (viewId === 'inventory') renderInventory(); // Triggers the new page!
+    if (viewId === 'inventory') renderInventory(); 
     
-    document.getElementById('cart-total-nav').innerText = getCartTotal().toFixed(2);
-    document.getElementById('wish-count').innerText = wishlist.length;
+    const cartTotalNav = document.getElementById('cart-total-nav');
+    if(cartTotalNav) cartTotalNav.innerText = getCartTotal().toFixed(2);
+    
+    const wishCountNav = document.getElementById('wish-count');
+    if(wishCountNav) wishCountNav.innerText = wishlist.length;
     
     window.scrollTo(0,0);
 
@@ -133,4 +148,22 @@ function subscribeNewsletter(event) {
         console.error("Subscription error:", err);
         showToast("Error subscribing. Please try again.", "error");
     });
+}
+
+// NEW: Classic Dropdown Mobile Menu Logic
+function toggleMobileMenu(forceClose = false) {
+    const nav = document.getElementById('mobile-nav');
+    const icon = document.querySelector('.mobile-menu-btn i');
+    
+    if (!nav || !icon) return;
+
+    if (forceClose || nav.classList.contains('active')) {
+        nav.classList.remove('active');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+    } else {
+        nav.classList.add('active');
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+    }
 }

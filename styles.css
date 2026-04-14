@@ -190,8 +190,26 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
 .step { flex: 1; text-align: center; padding: 12px; color: var(--text-gray); font-weight: bold; border-radius: 10px; transition: 0.3s; }
 .step.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(242, 106, 68, 0.3);}
 
+/* --- MINIMAL HEADER MODE (For Our Story Page) --- */
+.minimal-nav nav {
+    justify-content: flex-end; 
+}
+.minimal-nav nav button {
+    display: none !important; /* Hides all the shopping buttons */
+}
+.minimal-nav nav button[onclick="showView('profile')"] {
+    display: flex !important; /* Brings ONLY the Sign In / Profile button back! */
+}
 
 @media (max-width: 850px) {
+    .minimal-nav nav {
+        justify-content: center !important; 
+    }
+
+    /* Forces the header and its menu to sit above all other text on the page! */
+    .landing-header {
+        z-index: 9999 !important; 
+    }
     /* --- KILL THE WHITE GAP --- */
     body, html { 
         overflow-x: hidden !important; 
@@ -204,7 +222,6 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
     .fsg-title { font-size: 3rem; }
     .fsg-text { max-width: 100%; }
     .fsg-visual img { height: 350px; width: 350px; }
-    .landing-nav { display: none; }
     .controls, .checkout-grid { grid-template-columns: 1fr; }
     .fsg-features { gap: 1.5rem; }
     .newsletter-box { flex-direction: column; text-align: center; padding: 2rem; }
@@ -261,4 +278,65 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
     .sign-up-container { z-index: 1; opacity: 0; pointer-events: none; transform: translateX(100%); }
     .auth-container.right-panel-active .sign-in-container { opacity: 0; pointer-events: none; transform: translateX(-100%); }
     .auth-container.right-panel-active .sign-up-container { opacity: 1; pointer-events: auto; transform: translateX(0); z-index: 5; }
+
+    /* --- NEW MOBILE MENU STYLES (CLASSIC DROPDOWN) --- */
+    .mobile-menu-btn { 
+        display: block !important; 
+        position: relative;
+        z-index: 2001 !important;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: white !important; /* Stays white in the header */
+    }
+    
+    .landing-nav {
+        position: absolute;
+        top: 75px; /* Drops it just below the header */
+        right: 5%; /* Aligns it to the right side */
+        width: 220px; /* Fixed width */
+        height: auto; /* "Only how much it needs!" */
+        max-width: none;
+        background: white;
+        border-radius: 16px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 20px;
+        z-index: 2000;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
+        
+        /* Smooth fade and slide animation */
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-15px); 
+        transition: all 0.3s ease; 
+        display: flex;
+    }
+    
+    .landing-nav.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    
+    .landing-nav a {
+        font-size: 1.1rem !important; /* Normal text size */
+        margin-bottom: 15px;
+        color: var(--text-dark) !important;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .landing-nav a:last-child {
+        margin-bottom: 0; /* Removes extra space at the bottom */
+    }
+    
+    .landing-nav a:hover {
+        color: var(--primary-color) !important;
+        padding-left: 5px; /* Cute little slide effect when touched */
+    }
 }

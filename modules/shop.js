@@ -1,7 +1,3 @@
-// =========================================================
-// SHOP MODULE
-// Shop All, Product filtering, Product rendering
-// =========================================================
 
 function handleLiveSearch(event) {
     const val = event.target.value.toLowerCase();

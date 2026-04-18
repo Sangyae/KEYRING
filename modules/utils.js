@@ -38,7 +38,17 @@ if (localStorage.getItem('kcTheme') === 'dark') {
 }
 
 function showView(viewId, addToHistory = true) {
-    // NEW FIX: If logged-out users click "Sign In" on the header, actually send them to login!
+    // 1. STRICT AUTH GUARD: Protect Admin & Inventory routes!
+    if (viewId === 'admin' || viewId === 'inventory') {
+        // If they aren't logged in, or their email isn't the admin email, kick them out!
+        if (currentUser !== 'admin@tinycrafts.com') {
+            showToast("Access Denied. Admin privileges required.", "error");
+            showView('landing', false); // Send them back to the home page
+            return; 
+        }
+    }
+
+    // 2. Protect the Profile route
     if (viewId === 'profile' && !currentUser) {
         showView('login', false);
         return;

@@ -167,3 +167,49 @@ function toggleMobileMenu(forceClose = false) {
         icon.classList.add('fa-times');
     }
 }
+
+// --- FORM INPUT VALIDATION HELPERS --- //
+
+// 1. Blocks numbers and symbols. Only allows letters and spaces (For Names)
+function validateNameInput(inputField) {
+    // The regex /[^a-zA-Z\s]/g means: "Find anything that is NOT a letter or space, and delete it"
+    inputField.value = inputField.value.replace(/[^a-zA-Z\s]/g, '');
+}
+
+// 2. Blocks letters and symbols. Only allows numbers (For Card Numbers, CVV, Phone)
+// Bonus: This automatically adds a space after every 4 digits for credit cards!
+function formatCardNumber(inputField) {
+    // First, strip out anything that isn't a number (\D)
+    let rawNumbers = inputField.value.replace(/\D/g, '');
+    
+    // Then, add a space after every 4 digits for that classic credit card look
+    let formatted = rawNumbers.replace(/(\d{4})(?=\d)/g, '$1 ');
+    
+    // Update the field!
+    inputField.value = formatted;
+}
+
+// 3. Strict Number Only (For things like CVV or Expiry where you don't want spaces)
+function validateStrictNumber(inputField) {
+    inputField.value = inputField.value.replace(/\D/g, '');
+}
+
+// --- SMART FORM SUBMISSION --- //
+function proceedToReview(event) {
+    // 1. Stop the button from accidentally refreshing the page
+    if (event) event.preventDefault(); 
+    
+    // 2. Find your checkout form (Make sure your <form> tag has id="checkout-form")
+    const form = document.getElementById('checkout-form'); 
+    
+    if (!form) return;
+
+    // 3. Ask the HTML if all 'required' fields are filled out correctly
+    if (form.checkValidity()) {
+        // If everything is perfect, move to the review page!
+        nextCheckoutStep(3);
+    } else {
+        // If something is missing, force the browser to show the red error popups!
+        form.reportValidity(); 
+    }
+}

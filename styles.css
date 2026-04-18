@@ -202,6 +202,33 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
 }
 
 @media (max-width: 850px) {
+    /* --- MOBILE FOOTER FIX --- */
+    footer {
+        padding: 40px 20px !important;
+        height: auto !important; /* Prevents the footer from cutting off */
+    }
+
+    /* This targets the container holding your 3 columns and forces them to stack */
+    footer > div {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 40px !important; 
+    }
+
+    /* Centers the Tiny Crafts logo and text */
+    footer > div > div {
+        width: 100% !important;
+        align-items: center !important;
+    }
+
+    /* Adds a little space between the individual links so they are easy to tap on mobile */
+    footer a {
+        margin-bottom: 15px !important;
+        display: inline-block;
+    }
+
     .minimal-nav nav {
         justify-content: center !important; 
     }
@@ -216,7 +243,6 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
         width: 100%; 
     }
 
-    /* --- GENERAL FIXES --- */
     .landing-wrapper { border-radius: 0 0 30px 30px; padding-bottom: 2rem;}
     .fsg-hero { grid-template-columns: 1fr; text-align: center; gap: 2rem; padding-top: 2rem;}
     .fsg-title { font-size: 3rem; }
@@ -231,20 +257,20 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
     .social-grid img { width: 33.33%; }
     .social-grid img:nth-child(4), .social-grid img:nth-child(5) { display: none; }
 
-    /* --- TABLE FIXES --- */
+    
     table, thead, tbody, th, td, tr { display: block; }
     thead tr { display: none; }
     td { display: flex; justify-content: space-between; align-items: center; text-align: right; border-bottom: none;}
     tr { border-bottom: 1px solid var(--border-color); padding: 10px 0;}
     td::before { content: attr(data-label); font-weight: bold; float: left; text-align: left; color: var(--text-gray);}
 
-    /* --- 1. NAVIGATION BAR FIX --- */
+    /* ---  NAVIGATION BAR--- */
     #main-header { flex-direction: column; align-items: center; padding: 15px 10px 10px 10px; gap: 10px; }
     #main-header nav { display: flex; width: 100%; overflow-x: auto; justify-content: flex-start; padding-bottom: 5px; gap: 8px; -ms-overflow-style: none; scrollbar-width: none; }
     #main-header nav::-webkit-scrollbar { display: none; }
     #main-header nav button { white-space: nowrap; flex-shrink: 0; font-size: 0.85rem; padding: 8px 15px; }
 
-    /* --- 2. LOGIN / SIGNUP FIX --- */
+     /* LOGIN / SIGNUP  */
     #login-view {
         perspective: none !important;
         height: auto !important;
@@ -287,7 +313,9 @@ th { background: var(--input-bg); font-weight: 700; color: var(--text-gray); tex
         background: none;
         border: none;
         cursor: pointer;
-        color: white !important; /* Stays white in the header */
+        color: white !important; 
+        margin-left: auto;       
+        margin-right: 15px;
     }
     
     .landing-nav {

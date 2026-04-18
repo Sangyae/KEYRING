@@ -326,47 +326,55 @@
     </div>
     <div class="checkout-grid">
         <div class="checkout-card" id="checkout-form-container">
-            <div id="checkout-step-1">
-                <h3 style="margin-bottom: 15px;">Delivery Details</h3>
-                <input type="text" id="checkout-name" placeholder="Full Name">
-                <input type="text" id="checkout-address" placeholder="Full Shipping Address">
-                
-                <div style="display:flex; gap:10px; margin-top: 20px;">
-                    <button class="btn-cancel" onclick="showView('cart')" style="width: 50%;">Back to Basket</button>
-                    <button class="btn-primary" onclick="nextCheckoutStep(2)" style="width: 50%;">Proceed to Payment</button>
+            
+            <form id="checkout-form">
+                <div id="checkout-step-1">
+                    <h3 style="margin-bottom: 15px;">Delivery Details</h3>
+                    
+                    <input type="text" id="checkout-name" placeholder="Full name" oninput="validateNameInput(this)" required>
+                    <input type="text" id="checkout-address" placeholder="City" oninput="validateNameInput(this)" required>
+                    
+                    <div style="display:flex; gap:10px; margin-top: 20px;">
+                        <button type="button" class="btn-cancel" onclick="showView('cart')" style="width: 50%;">Back to Basket</button>
+                        <button type="button" class="btn-primary" onclick="nextCheckoutStep(2)" style="width: 50%;">Proceed to Payment</button>
+                    </div>
                 </div>
-            </div>
-            <div id="checkout-step-2" class="hidden">
-                <h3 style="margin-bottom: 15px;">Payment Details</h3>
-                <div class="credit-card-container">
-                    <div class="credit-card" id="interactive-card">
-                        <div class="card-inner" id="card-inner">
-                            <div class="card-front">
-                                <div style="font-size: 2rem; text-align: right;"><i class="fab fa-cc-visa"></i></div>
-                                <div style="font-size: 1.4rem; letter-spacing: 2px; margin: 20px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);" id="card-disp-num">#### #### #### ####</div>
-                                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; text-transform: uppercase;">
-                                    <div><small style="color: #FFD59E;">Cardholder</small><div id="card-disp-name">JOHN DOE</div></div>
-                                    <div><small style="color: #FFD59E;">Expires</small><div id="card-disp-exp">MM/YY</div></div>
+                
+                <div id="checkout-step-2" class="hidden">
+                    <h3 style="margin-bottom: 15px;">Payment Details</h3>
+                    <div class="credit-card-container">
+                        <div class="credit-card" id="interactive-card">
+                            <div class="card-inner" id="card-inner">
+                                <div class="card-front">
+                                    <div style="font-size: 2rem; text-align: right;"><i class="fab fa-cc-visa"></i></div>
+                                    <div style="font-size: 1.4rem; letter-spacing: 2px; margin: 20px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);" id="card-disp-num">#### #### #### ####</div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; text-transform: uppercase;">
+                                        <div><small style="color: #FFD59E;">Cardholder</small><div id="card-disp-name">JOHN DOE</div></div>
+                                        <div><small style="color: #FFD59E;">Expires</small><div id="card-disp-exp">MM/YY</div></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-back">
-                                <div style="background: #111; height: 40px; margin-top: 25px; width: 100%;"></div>
-                                <div style="background: white; color: black; margin: 15px; padding: 10px; text-align: right; border-radius: 4px; font-weight: bold;">CVV: <span id="card-disp-cvv">###</span></div>
+                                <div class="card-back">
+                                    <div style="background: #111; height: 40px; margin-top: 25px; width: 100%;"></div>
+                                    <div style="background: white; color: black; margin: 15px; padding: 10px; text-align: right; border-radius: 4px; font-weight: bold;">CVV: <span id="card-disp-cvv">###</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <input type="tel" id="card-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="formatCardNumber(this)" required>
+                    <input type="text" id="card-name" placeholder="Full Name on Card" oninput="validateNameInput(this)" required>
+                    <div style="display:flex; gap:10px;">
+                        <input type="tel" id="card-exp" placeholder="MM" maxlength="2" oninput="validateStrictNumber(this)" required>
+                        <input type="tel" id="card-exp" placeholder="YY" maxlength="2" oninput="validateStrictNumber(this)" required>
+                        <input type="tel" id="card-cvv" placeholder="123" maxlength="3" oninput="validateStrictNumber(this)" required>
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top: 20px;">
+                        <button type="button" class="btn-cancel" onclick="nextCheckoutStep(1)" style="width: 50%;">Back</button>
+                        
+                        <button type="button" class="btn-primary" onclick="proceedToReview(event)">Review Order</button>
+                    </div>
                 </div>
-                <input type="text" id="card-num" placeholder="Card Number" maxlength="19" oninput="updateCardUI()">
-                <input type="text" id="card-name" placeholder="Name on Card" oninput="updateCardUI()">
-                <div style="display:flex; gap:10px;">
-                    <input type="text" id="card-exp" placeholder="MM/YY" maxlength="5" oninput="updateCardUI()">
-                    <input type="text" id="card-cvv" placeholder="CVV" maxlength="3" oninput="updateCardUI()" onfocus="flipCard(true)" onblur="flipCard(false)">
-                </div>
-                <div style="display:flex; gap:10px; margin-top: 20px;">
-                    <button class="btn-cancel" onclick="nextCheckoutStep(1)" style="width: 50%;">Back</button>
-                    <button class="btn-primary" onclick="nextCheckoutStep(3)" style="width: 50%;">Review Order</button>
-                </div>
-            </div>
+            </form>
+            
             <div id="checkout-step-3" class="hidden">
                 <h3 style="margin-bottom: 15px;">Final Review</h3>
                 <p style="color: var(--text-gray);">Please confirm your details below.</p>
@@ -379,6 +387,7 @@
                     <button class="btn-primary" onclick="confirmOrder()" style="width: 50%;">Pay £<span id="checkout-total-btn">0.00</span></button>
                 </div>
             </div>
+            
         </div>
         <div class="checkout-card" style="height: fit-content;">
             <h3 style="margin-bottom: 15px; font-family: 'Poppins', sans-serif;">Order Summary</h3>

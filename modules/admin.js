@@ -118,19 +118,35 @@ function adminUpdateOrderStatus(orderId, newStatus) {
         showToast("Failed to update status.", "error");
     });
 }
-// NEW: Delete an order from the database
+// --- ADMIN: DELETE ORDER (UI TRIGGER) --- //
 function adminDeleteOrder(orderId) {
-    if(confirm("Are you sure you want to permanently delete this order?")) {
-        db.collection("orders").doc(orderId).delete()
-        .then(() => {
-            showToast("Order permanently deleted!", "success");
-            renderAdmin(); // Refresh the dashboard instantly
-        })
-        .catch(err => {
-            console.error(err);
-            showToast("Error deleting order", "error");
-        });
-    }
+    // 1. Open our beautiful custom modal
+    openModal('admin-delete-modal');
+    
+    // 2. Find the "Yes, Delete" button inside that modal
+    const confirmBtn = document.getElementById('confirm-delete-btn');
+    
+    // 3. Tell that button EXACTLY which order to delete if they click it!
+    confirmBtn.onclick = function() {
+        executeDeleteOrder(orderId);
+    };
+}
+
+// --- ADMIN: EXECUTE ACTUAL DELETION --- //
+function executeDeleteOrder(orderId) {
+    // Instantly hide the modal
+    closeModal('admin-delete-modal'); 
+    
+    // Delete from Firebase
+    db.collection("orders").doc(orderId).delete()
+    .then(() => {
+        showToast("Order permanently deleted!", "success");
+        renderAdmin(); // Refresh the dashboard instantly to remove the row
+    })
+    .catch(err => {
+        console.error(err);
+        showToast("Error deleting order", "error");
+    });
 }
 // 5. RENDER DEDICATED INVENTORY PAGE
 function renderInventory() {

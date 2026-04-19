@@ -1,5 +1,3 @@
-// =========================================================
-// ADMIN MODULE
 // Admin dashboard, Sprint tracker, Inventory management
 // =========================================================
 
@@ -107,14 +105,17 @@ function adminAddProduct() {
     });
 }
 
+// --- ADMIN: UPDATE ORDER STATUS --- //
 function adminUpdateOrderStatus(orderId, newStatus) {
-    db.collection("orders").doc(orderId).update({ status: newStatus })
+    db.collection("orders").doc(orderId).update({
+        status: newStatus
+    })
     .then(() => {
-        showToast(`Order marked as ${newStatus}!`, "success");
+        showToast(`Order status updated to ${newStatus}!`, "success");
     })
     .catch(err => {
-        console.error(err);
-        showToast("Error updating order status", "error");
+        console.error("Error updating status:", err);
+        showToast("Failed to update status.", "error");
     });
 }
 // NEW: Delete an order from the database
@@ -182,4 +183,35 @@ function filterInventory() {
     
     // Instantly redraw the table with only the matches!
     drawInventoryTable(filteredItems);
+}
+
+// --- ADMIN: ADD NEW PRODUCT --- //
+function addNewProduct(event) {
+    event.preventDefault(); // Stop page refresh
+    
+    // 1. Gather all the data from the form
+    const newProduct = {
+        name: document.getElementById('new-prod-name').value,
+        price: parseFloat(document.getElementById('new-prod-price').value),
+        category: document.getElementById('new-prod-cat').value,
+        stock: parseInt(document.getElementById('new-prod-stock').value),
+        img: document.getElementById('new-prod-img').value,
+        description: document.getElementById('new-prod-desc').value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice!
+    };
+
+    // 2. Send it to Firebase
+    db.collection("products").add(newProduct)
+        .then(() => {
+            showToast("New craft added successfully!", "success");
+            closeModal('add-product-modal');
+            event.target.reset(); // Clear the form
+            
+            // If you have a function to refresh the inventory table, call it here!
+            if(typeof renderInventory === 'function') renderInventory(); 
+        })
+        .catch(err => {
+            console.error("Error adding product:", err);
+            showToast("Failed to add product.", "error");
+        });
 }

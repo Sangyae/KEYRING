@@ -23,20 +23,6 @@ function openModal(id) {
     document.getElementById(id).classList.remove('hidden'); 
 }
 
-function toggleTheme() {
-    const root = document.documentElement;
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    root.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    localStorage.setItem('kcTheme', isDark ? 'light' : 'dark');
-    document.getElementById('theme-btn').innerHTML = isDark ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-}
-
-// Load theme from localStorage on page load
-if (localStorage.getItem('kcTheme') === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.getElementById('theme-btn').innerHTML = '<i class="fas fa-sun"></i>';
-}
-
 function showView(viewId, addToHistory = true) {
     // 1. STRICT AUTH GUARD: Protect Admin & Inventory routes!
     if (viewId === 'admin' || viewId === 'inventory') {

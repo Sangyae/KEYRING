@@ -22,7 +22,7 @@
         <button onclick="showView('cart')"><i class="fas fa-shopping-cart" id="cart-icon"></i> Cart (£<span id="cart-total-nav">0.00</span>)</button>
         <button onclick="showView('profile')"><i class="fas fa-user"></i> <span id="profile-name-nav">Profile</span></button>
         <button onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
-        <button onclick="toggleTheme()" id="theme-btn"><i class="fas fa-moon"></i></button>
+        
     </nav>
 </header>
 
@@ -45,7 +45,7 @@
                 <a href="javascript:void(0)" onclick="showView('landing'); toggleMobileMenu(true)">Home</a>
                 <a href="javascript:void(0)" onclick="showView('shop'); toggleMobileMenu(true)">Shop All</a>
                 <a href="javascript:void(0)" onclick="showView('about'); toggleMobileMenu(true)">Our Story</a>
-                <a href="mailto:hello@tinycrafts.com" onclick="toggleMobileMenu(true)">Contact</a>
+                <a href="mailto:admin@tinycrafts.com" onclick="toggleMobileMenu(true)">Contact</a>
             </nav>
 
             <div style="display: flex; gap: 1rem; align-items: center; position: relative; z-index: 1001;">
@@ -455,11 +455,16 @@
         <div style="margin-bottom: 20px; text-align: right;">
             <input type="text" id="inventory-search" placeholder="Search crafts by name..." onkeyup="filterInventory()" style="width: 100%; max-width: 300px; padding: 12px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Poppins', sans-serif;">
         </div>
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <button class="btn-primary" style="width: auto; padding: 12px 25px;" onclick="openModal('add-product-modal')">Add New Craft <i class="fas fa-plus" style="margin-left: 5px;"></i></button>
+        </div>
         <div class="checkout-card" style="overflow-x: auto;">
             <table style="width: 100%;">
-            <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
-            <tbody id="inventory-page-list"></tbody>
-        </table>
+                <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+                <tbody id="inventory-page-list"></tbody>
+            </table>
+        </div>
+
     </div>
 </div>
 
@@ -508,6 +513,30 @@
             <button class="btn-cancel" onclick="closeModal('confirmation-modal')">Cancel</button>
             <button class="btn-primary" style="width: auto; padding: 12px 30px; border-radius: 50px;" onclick="confirmOrder()">Yes, Place Order</button>
         </div>
+    </div>
+</div>
+
+<div id="add-product-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 500px;">
+        <span class="close-modal" onclick="closeModal('add-product-modal')">&times;</span>
+        <h3 style="margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Add New Craft 🧶</h3>
+        
+        <form onsubmit="addNewProduct(event)" style="display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" id="new-prod-name" placeholder="Craft Name (e.g., Happy Fox)" required style="margin: 0;">
+            <input type="number" id="new-prod-price" placeholder="Price (£)" step="0.01" required style="margin: 0;">
+            
+            <select id="new-prod-cat" required style="margin: 0; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <option value="Animals & Wildlife">Animals & Wildlife</option>
+                <option value="Food & Plants">Food & Plants</option>
+                <option value="Symbols & Charms">Symbols & Charms</option>
+            </select>
+            
+            <input type="number" id="new-prod-stock" placeholder="Stock Quantity" required style="margin: 0;">
+            <input type="url" id="new-prod-img" placeholder="Image URL (e.g., images/fox.jpg)" required style="margin: 0;">
+            <textarea id="new-prod-desc" placeholder="Product Description..." rows="3" required style="margin: 0; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);"></textarea>
+            
+            <button type="submit" class="btn-primary" style="margin-top: 10px;">Save to Database</button>
+        </form>
     </div>
 </div>
 

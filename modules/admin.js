@@ -171,21 +171,30 @@ function drawInventoryTable(itemsToDraw) {
     const listEl = document.getElementById('inventory-page-list');
     if (!listEl) return;
     
+    // 1. THE EMPTY STATE (Fixed: Removed the broken buttons from here)
     if (itemsToDraw.length === 0) {
-        listEl.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-gray); padding: 20px;">No items found matching your search.</td></tr>`;
+        listEl.innerHTML = `<tr>
+            <td colspan="5" style="text-align:center; color:var(--text-gray); padding: 20px;">No items found matching your search.</td>
+        </tr>`;
         return;
     }
 
+    // 2. THE ACTUAL ROWS (Fixed: Added the Edit button next to the Delete button)
     listEl.innerHTML = itemsToDraw.map(p => {
         let safeImg = p.img || 'images/baby.jpg';
-        if (!safeImg.startsWith('images/') && !safeImg.startsWith('http')) safeImg = 'images/' + safeImg;
+        if (!safeImg.startsWith('images/') && !safeImg.startsWith('http') && !safeImg.startsWith('data:image')) safeImg = 'images/' + safeImg;
         
         return `<tr>
             <td data-label="Image"><img src="${safeImg}" onerror="this.src='images/baby.jpg'" style="width:45px; height:45px; object-fit:cover; border-radius:8px;"></td>
             <td data-label="Name" style="color:var(--text-dark); font-weight:bold;">${p.name}</td>
             <td data-label="Price" style="color:var(--primary-color); font-weight:bold;">£${Number(p.price).toFixed(2)}</td>
             <td data-label="Stock"><input type="number" value="${p.stock}" onchange="adminUpdateStock('${p.id}', this.value)" style="width:70px; padding:8px; margin:0; border-radius:8px;"></td>
-            <td data-label="Action"><button onclick="adminDelete('${p.id}')" style="color:var(--error-red); background:none; border:none; cursor:pointer; font-size:1.3rem;"><i class="fas fa-trash-alt"></i></button></td>
+            
+            <td data-label="Action">
+                <button onclick="openEditModal('${p.id}')" style="color:var(--primary-color); background:none; border:none; cursor:pointer; font-size:1.3rem; margin-right: 15px;" title="Edit"><i class="fas fa-edit"></i></button>
+                
+                <button onclick="adminDelete('${p.id}')" style="color:var(--error-red); background:none; border:none; cursor:pointer; font-size:1.3rem;" title="Delete"><i class="fas fa-trash-alt"></i></button>
+            </td>
         </tr>`;
     }).join('');
 }
@@ -201,33 +210,91 @@ function filterInventory() {
     drawInventoryTable(filteredItems);
 }
 
-// --- ADMIN: ADD NEW PRODUCT --- //
+// --- ADMIN: ADD NEW PRODUCT (WITH LOCAL FILE UPLOAD) --- //
 function addNewProduct(event) {
-    event.preventDefault(); // Stop page refresh
-    
-    // 1. Gather all the data from the form
-    const newProduct = {
-        name: document.getElementById('new-prod-name').value,
-        price: parseFloat(document.getElementById('new-prod-price').value),
-        category: document.getElementById('new-prod-cat').value,
-        stock: parseInt(document.getElementById('new-prod-stock').value),
-        img: document.getElementById('new-prod-img').value,
-        description: document.getElementById('new-prod-desc').value,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice!
+    event.preventDefault();
+    const fileInput = document.getElementById('new-prod-img-file');
+    const file = fileInput.files[0];
+
+    // Helper function to save after image is processed
+    const saveToFirebase = (imgData) => {
+        const newProduct = {
+            name: document.getElementById('new-prod-name').value,
+            price: parseFloat(document.getElementById('new-prod-price').value),
+            category: document.getElementById('new-prod-cat').value,
+            stock: parseInt(document.getElementById('new-prod-stock').value),
+            img: imgData,
+            description: document.getElementById('new-prod-desc').value,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        db.collection("products").add(newProduct).then(() => {
+            showToast("New craft added!", "success");
+            closeModal('add-product-modal');
+            event.target.reset(); // Clear form
+            if(typeof renderInventory === 'function') renderInventory();
+        }).catch(err => showToast("Failed to add product.", "error"));
     };
 
-    // 2. Send it to Firebase
-    db.collection("products").add(newProduct)
-        .then(() => {
-            showToast("New craft added successfully!", "success");
-            closeModal('add-product-modal');
-            event.target.reset(); // Clear the form
-            
-            // If you have a function to refresh the inventory table, call it here!
-            if(typeof renderInventory === 'function') renderInventory(); 
-        })
-        .catch(err => {
-            console.error("Error adding product:", err);
-            showToast("Failed to add product.", "error");
-        });
+    // Read the file from the computer and convert to a text string
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => saveToFirebase(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        saveToFirebase('images/baby.jpg'); // Fallback if no file
+    }
+}
+
+// --- ADMIN: OPEN EDIT MODAL --- //
+function openEditModal(id) {
+    const p = products.find(x => String(x.id) === String(id));
+    if(!p) return;
+
+    // Fill the form with the current product's details
+    document.getElementById('edit-prod-id').value = id;
+    document.getElementById('edit-prod-name').value = p.name;
+    document.getElementById('edit-prod-price').value = p.price;
+    document.getElementById('edit-prod-cat').value = p.category || 'Animals & Wildlife';
+    document.getElementById('edit-prod-stock').value = p.stock;
+    document.getElementById('edit-prod-desc').value = p.description || '';
+    document.getElementById('edit-prod-img-file').value = ''; // Reset file input
+
+    openModal('edit-product-modal');
+}
+
+// --- ADMIN: SAVE EDITED PRODUCT --- //
+function saveEditedProduct(event) {
+    event.preventDefault();
+    const id = document.getElementById('edit-prod-id').value;
+    const fileInput = document.getElementById('edit-prod-img-file');
+    const file = fileInput.files[0];
+
+    const updateInFirebase = (imgData) => {
+        const updatedData = {
+            name: document.getElementById('edit-prod-name').value,
+            price: parseFloat(document.getElementById('edit-prod-price').value),
+            category: document.getElementById('edit-prod-cat').value,
+            stock: parseInt(document.getElementById('edit-prod-stock').value),
+            description: document.getElementById('edit-prod-desc').value,
+        };
+        
+        // Only update the image if the admin actually picked a new one
+        if (imgData) updatedData.img = imgData;
+
+        db.collection("products").doc(id).update(updatedData).then(() => {
+            showToast("Craft updated successfully!", "success");
+            closeModal('edit-product-modal');
+            renderInventory(); // Refresh the table
+        }).catch(err => showToast("Error updating product", "error"));
+    };
+
+    // Process new image if uploaded, otherwise save without touching the image
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => updateInFirebase(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        updateInFirebase(null);
+    }
 }

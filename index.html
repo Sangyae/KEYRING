@@ -545,10 +545,40 @@
             </select>
             
             <input type="number" id="new-prod-stock" placeholder="Stock Quantity" required style="margin: 0;">
-            <input type="url" id="new-prod-img" placeholder="Image URL (e.g., images/fox.jpg)" required style="margin: 0;">
+            
+            <label style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: -10px;">Upload Image:</label>
+            <input type="file" id="new-prod-img-file" accept="image/*" required style="margin: 0;">
+            
             <textarea id="new-prod-desc" placeholder="Product Description..." rows="3" required style="margin: 0; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);"></textarea>
             
             <button type="submit" class="btn-primary" style="margin-top: 10px;">Save to Database</button>
+        </form>
+    </div>
+</div>
+
+<div id="edit-product-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width: 500px;">
+        <span class="close-modal" onclick="closeModal('edit-product-modal')">&times;</span>
+        <h3 style="margin-bottom: 20px; font-family: 'Poppins', sans-serif;">Edit Craft ✏️</h3>
+        
+        <form onsubmit="saveEditedProduct(event)" style="display: flex; flex-direction: column; gap: 15px;">
+            <input type="hidden" id="edit-prod-id"> <input type="text" id="edit-prod-name" required style="margin: 0;">
+            <input type="number" id="edit-prod-price" step="0.01" required style="margin: 0;">
+            
+            <select id="edit-prod-cat" required style="margin: 0; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <option value="Animals & Wildlife">Animals & Wildlife</option>
+                <option value="Food & Plants">Food & Plants</option>
+                <option value="Symbols & Charms">Symbols & Charms</option>
+            </select>
+            
+            <input type="number" id="edit-prod-stock" required style="margin: 0;">
+            
+            <label style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: -10px;">Update Image (Leave blank to keep current):</label>
+            <input type="file" id="edit-prod-img-file" accept="image/*" style="margin: 0;">
+            
+            <textarea id="edit-prod-desc" rows="3" required style="margin: 0; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);"></textarea>
+            
+            <button type="submit" class="btn-primary" style="margin-top: 10px;">Save Changes</button>
         </form>
     </div>
 </div>

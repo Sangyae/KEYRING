@@ -124,3 +124,48 @@ app.listen(PORT, () => {
     console.log(`🎯 Tiny Crafts Server is running on http://localhost:${PORT}`);
     console.log(`📦 API available at http://localhost:${PORT}/api/products`);
 });
+
+require('dotenv').config();
+const express = require('express');
+const { GoogleGenAI } = require('@google/genai');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware to parse incoming JSON requests
+app.use(express.json());
+
+// Serve your static frontend files (assuming they are in a folder called 'public')
+app.use(express.static(__dirname)); 
+
+// Initialize the Gemini client
+// It automatically detects the GEMINI_API_KEY from your .env file
+const ai = new GoogleGenAI({});
+
+// The chat endpoint your frontend script is calling
+app.post('/api/chat', async (req, res) => {
+    try {
+        const userMessage = req.body.message;
+
+        if (!userMessage) {
+            return res.status(400).json({ error: "Message is required" });
+        }
+
+        // Call the Gemini API
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: userMessage,
+        });
+
+        // Send the AI's response back to the frontend
+        res.json({ reply: response.text });
+
+    } catch (error) {
+        console.error("Error communicating with Gemini:", error);
+        res.status(500).json({ error: "Failed to generate response" });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});

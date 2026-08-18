@@ -74,3 +74,4 @@ const defaultProducts = [
 ];
 
 let products = JSON.parse(localStorage.getItem('kcProducts')) || defaultProducts;
+

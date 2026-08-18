@@ -1,8 +1,3 @@
-// =========================================================
-// CART MODULE
-// Cart management, Add/Remove items, Checkout
-// =========================================================
-
 function addToCart(id, event) {
     if(!currentUser) {
         showToast("Please Sign In first.", "error");

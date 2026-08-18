@@ -1,6 +1,3 @@
-// Admin dashboard, Sprint tracker, Inventory management
-// =========================================================
-
 function renderAdmin() {
     document.getElementById('admin-products-count').innerText = products.length;
     
@@ -105,7 +102,7 @@ function adminAddProduct() {
     });
 }
 
-// --- ADMIN: UPDATE ORDER STATUS --- //
+
 function adminUpdateOrderStatus(orderId, newStatus) {
     db.collection("orders").doc(orderId).update({
         status: newStatus

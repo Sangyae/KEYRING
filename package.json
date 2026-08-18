@@ -8,13 +8,22 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "@ai-sdk/react": "^4.0.70",
+    "@google/genai": "^2.17.1",
+    "ai": "^7.0.67",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "lucide-react": "^1.32.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
-  "keywords": ["keyrings", "crafts", "felt"],
+  "keywords": [
+    "keyrings",
+    "crafts",
+    "felt"
+  ],
   "author": "Tiny Crafts",
   "license": "MIT"
 }

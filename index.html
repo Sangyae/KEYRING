@@ -633,6 +633,42 @@
 <script src="modules/wishlist.js"></script>
 <script src="modules/profile.js"></script>
 <script src="modules/admin.js"></script>
+<script src = "modules/chatbot.js"></script>
 
+<!-- Tiny Crafts AI Chatbot Widget -->
+<div id="chat-widget-container">
+  <!-- Floating Button -->
+  <button id="chat-toggle-btn" class="chat-toggle-btn" aria-label="Open chat">
+    💬
+  </button>
+
+  <!-- Chat Window (hidden by default) -->
+  <div id="chat-window" class="chat-window hidden">
+    <div class="chat-header">
+      <div>
+        <h4>Tiny Crafts Guide</h4>
+        <span class="chat-subtitle">Handmade exactly for you</span>
+      </div>
+      <button id="chat-close-btn" class="chat-close-btn">&times;</button>
+    </div>
+
+    <div id="chat-messages" class="chat-messages">
+      <div class="chat-message bot">
+        Hello! 👋 I can help you find the perfect artisanal keyring or answer any product questions.
+      </div>
+    </div>
+
+    <form id="chat-form" class="chat-input-area">
+      <input 
+        type="text" 
+        id="chat-input" 
+        placeholder="Ask about our keyrings..." 
+        autocomplete="off" 
+        required 
+      />
+      <button type="submit" id="chat-send-btn">➤</button>
+    </form>
+  </div>
+</div>
 </body>
 </html>

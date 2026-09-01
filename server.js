@@ -1,13 +1,19 @@
-// =========================================================
+// ==================================================================
 // NODE.JS BACKEND SERVER FOR KEYRING SHOP
-// =========================================================
+// ==================================================================
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();                       // <-- ADDED: Loads your .env file
+const { GoogleGenAI } = require('@google/genai'); // <-- ADDED: Loads Gemini
+
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(__dirname));               // <-- ADDED: Serves your HTML/CSS files
+
+const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY});                   // <-- ADDED: Initializes AI
 
 // =========================================================
 // PRODUCT DATABASE (In-memory, can be replaced with DB)
@@ -125,23 +131,6 @@ app.listen(PORT, () => {
     console.log(`📦 API available at http://localhost:${PORT}/api/products`);
 });
 
-require('dotenv').config();
-const express = require('express');
-const { GoogleGenAI } = require('@google/genai');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware to parse incoming JSON requests
-app.use(express.json());
-
-// Serve your static frontend files (assuming they are in a folder called 'public')
-app.use(express.static(__dirname)); 
-
-// Initialize the Gemini client
-// It automatically detects the GEMINI_API_KEY from your .env file
-const ai = new GoogleGenAI({});
-
 // The chat endpoint your frontend script is calling
 app.post('/api/chat', async (req, res) => {
     try {
@@ -164,8 +153,4 @@ app.post('/api/chat', async (req, res) => {
         console.error("Error communicating with Gemini:", error);
         res.status(500).json({ error: "Failed to generate response" });
     }
-});
-
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
 });
